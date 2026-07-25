@@ -47,8 +47,8 @@ Interactive API docs: http://localhost:8000/docs
 |-------|--------|--------|
 | 0 | Repo skeleton, /health, CI | done |
 | 1 | LLM client (Claude/Bedrock switch, model cascade, cost meter) | done |
-| 2 | Data connectors + synthetic SAP-like dataset with ground truth | next |
-| 3 | PII module: detection, fuzzy search, deterministic pseudonymization | |
+| 2 | Data connectors + synthetic SAP-like dataset with ground truth | done |
+| 3 | PII module: detection, fuzzy search, deterministic pseudonymization | next |
 | 4 | Agent: schema retrieval, SQL generation, sqlglot policy, citations | |
 | 5 | Guardrails: injection filter (in), PII scan (out) | |
 | 6 | Eval panel: golden dataset, live metrics | |
