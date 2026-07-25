@@ -82,3 +82,22 @@ def test_structured_output_retries_once_on_invalid_response() -> None:
     assert len(provider.calls) == 2
     # The retry prompt must include the validation error so the model can fix it.
     assert "Validation errors" in provider.calls[1]["prompt"]
+
+
+def test_pricing_haiku_cheaper_than_sonnet() -> None:
+    from app.llm.cost import estimate_cost_usd
+    from app.llm.schemas import Usage
+
+    usage = Usage(input_tokens=1000, output_tokens=1000)
+    assert estimate_cost_usd("claude-haiku-4-5-20251001", usage) < estimate_cost_usd(
+        "claude-sonnet-4-6", usage
+    )
+
+
+def test_pricing_exact_math() -> None:
+    from app.llm.cost import estimate_cost_usd
+    from app.llm.schemas import Usage
+
+    # Haiku: 1M input at $1 + 1M output at $5 = $6
+    usage = Usage(input_tokens=1_000_000, output_tokens=1_000_000)
+    assert estimate_cost_usd("anthropic.claude-haiku-4-5-v1:0", usage) == 6.0
