@@ -1,14 +1,16 @@
 """FastAPI application entry point.
 
-Stage 0 exposes only /health. Every later stage plugs its router in here:
-    Stage 3 -> app.include_router(pii.router)
-    Stage 4 -> app.include_router(agent.router)
+Each stage plugs its router in here:
+    Stage 0 -> health
+    Stage 1 -> llm (usage meter + ping)
+    Stage 3 -> pii
+    Stage 4 -> agent
     Stage 5 -> guardrails middleware
 """
 
 from fastapi import FastAPI
 
-from app.api.routes import health
+from app.api.routes import health, llm
 from app.config import get_settings
 
 settings = get_settings()
@@ -20,3 +22,5 @@ app = FastAPI(
 )
 
 app.include_router(health.router, tags=["system"])
+app.include_router(llm.router, tags=["llm"])
+app.include_router(llm.router, tags=["llm"])
