@@ -24,6 +24,10 @@ class Settings(BaseSettings):
     # Rotate per environment; in production this lives in a KMS, not in .env.
     pii_secret_key: str = "change-me-before-the-event"
 
+    # Agent data-access policy
+    agent_denied_columns: list[str] = ["TELF1", "SMTP_ADDR"]  # restricted PII columns
+    agent_max_rows: int = 500
+
     # Database
     database_url: str = "postgresql+psycopg://tea:tea@localhost:5432/tea"
 
