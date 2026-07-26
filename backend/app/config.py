@@ -20,6 +20,10 @@ class Settings(BaseSettings):
     app_name: str = "trusted-enterprise-agent"
     version: str = "0.1.0"
 
+    # PII pseudonymization: HMAC key that fixes the original->fake mapping.
+    # Rotate per environment; in production this lives in a KMS, not in .env.
+    pii_secret_key: str = "change-me-before-the-event"
+
     # Database
     database_url: str = "postgresql+psycopg://tea:tea@localhost:5432/tea"
 
