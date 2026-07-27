@@ -1,0 +1,156 @@
+{
+  "entities": [
+    {
+      "canonical_name": "Paul Jonas",
+      "occurrences": [
+        {
+          "column": "NAME1",
+          "pii_type": "PERSON_NAME",
+          "row_key": "0000001000",
+          "table": "kna1",
+          "value": "Paul Jonas"
+        },
+        {
+          "column": "SMTP_ADDR",
+          "pii_type": "EMAIL",
+          "row_key": "0000001000",
+          "table": "kna1",
+          "value": "paul.jonas@example.com"
+        },
+        {
+          "column": "NAME1",
+          "pii_type": "PERSON_NAME",
+          "row_key": "0000007000",
+          "table": "lfa1",
+          "value": "Jonas, Paul"
+        },
+        {
+          "column": "SGTXT",
+          "pii_type": "PERSON_NAME",
+          "row_key": "0005000000/001",
+          "table": "bseg",
+          "value": "Payment to Paul Jonas re invoice 98696"
+        },
+        {
+          "column": "SGTXT",
+          "pii_type": "PERSON_NAME",
+          "row_key": "0005000120/001",
+          "table": "bseg",
+          "value": "Payment to Paul Jnoas re invoice 83259"
+        },
+        {
+          "column": "SGTXT",
+          "pii_type": "PERSON_NAME",
+          "row_key": "0005000240/001",
+          "table": "bseg",
+          "value": "Payment to PAUL JONAS re invoice 43466"
+        },
+        {
+          "column": "SGTXT",
+          "pii_type": "PERSON_NAME",
+          "row_key": "0005000360/001",
+          "table": "bseg",
+          "value": "Payment to Paul Jnoas re invoice 27176"
+        }
+      ],
+      "person_id": "person_001"
+    },
+    {
+      "canonical_name": "Paula Erickson",
+      "occurrences": [
+        {
+          "column": "NAME1",
+          "pii_type": "PERSON_NAME",
+          "row_key": "0000001001",
+          "table": "kna1",
+          "value": "Paula Erickson"
+        },
+        {
+          "column": "SMTP_ADDR",
+          "pii_type": "EMAIL",
+          "row_key": "0000001001",
+          "table": "kna1",
+          "value": "paula.erickson@example.com"
+        },
+        {
+          "column": "NAME1",
+          "pii_type": "PERSON_NAME",
+          "row_key": "0000007001",
+          "table": "lfa1",
+          "value": "Erickson, Paula"
+        },
+        {
+          "column": "SGTXT",
+          "pii_type": "PERSON_NAME",
+          "row_key": "0005000040/001",
+          "table": "bseg",
+          "value": "Payment to P. Erickson re invoice 67422"
+        },
+        {
+          "column": "SGTXT",
+          "pii_type": "PERSON_NAME",
+          "row_key": "0005000160/001",
+          "table": "bseg",
+          "value": "Payment to Paula Eirckson re invoice 46211"
+        },
+        {
+          "column": "SGTXT",
+          "pii_type": "PERSON_NAME",
+          "row_key": "0005000280/001",
+          "table": "bseg",
+          "value": "Payment to Paula Erickson re invoice 96646"
+        }
+      ],
+      "person_id": "person_002"
+    },
+    {
+      "canonical_name": "Yuri Kovalev",
+      "occurrences": [
+        {
+          "column": "NAME1",
+          "pii_type": "PERSON_NAME",
+          "row_key": "0000001002",
+          "table": "kna1",
+          "value": "Yuri Kovalev"
+        },
+        {
+          "column": "SMTP_ADDR",
+          "pii_type": "EMAIL",
+          "row_key": "0000001002",
+          "table": "kna1",
+          "value": "yuri.kovalev@example.com"
+        },
+        {
+          "column": "NAME1",
+          "pii_type": "PERSON_NAME",
+          "row_key": "0000007002",
+          "table": "lfa1",
+          "value": "Kovalev, Yuri"
+        },
+        {
+          "column": "SGTXT",
+          "pii_type": "PERSON_NAME",
+          "row_key": "0005000080/001",
+          "table": "bseg",
+          "value": "Payment to Yuri Kovalev re invoice 10464"
+        },
+        {
+          "column": "SGTXT",
+          "pii_type": "PERSON_NAME",
+          "row_key": "0005000200/001",
+          "table": "bseg",
+          "value": "Payment to Kowaljow, Juri re invoice 21959"
+        },
+        {
+          "column": "SGTXT",
+          "pii_type": "PERSON_NAME",
+          "row_key": "0005000320/001",
+          "table": "bseg",
+          "value": "Payment to YURI KOVALEV re invoice 27987"
+        }
+      ],
+      "person_id": "person_003"
+    }
+  ],
+  "seed": 42
+}
