@@ -24,6 +24,9 @@ class Settings(BaseSettings):
     # Rotate per environment; in production this lives in a KMS, not in .env.
     pii_secret_key: str = "change-me-before-the-event"
 
+    # Guardrails
+    guardrails_use_llm: bool = False  # enable the LLM injection classifier layer
+
     # Agent data-access policy
     agent_denied_columns: list[str] = ["TELF1", "SMTP_ADDR"]  # restricted PII columns
     agent_max_rows: int = 500
