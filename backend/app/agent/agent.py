@@ -21,6 +21,8 @@ from pydantic import BaseModel, Field
 from app.agent.catalog import TableCard, build_catalog, retrieve
 from app.agent.policy import check
 from app.data.connectors import duckdb_over_csv
+from app.guardrails.input_filter import inspect_input
+from app.guardrails.output_filter import inspect_output
 from app.llm.client import LLMClient, Tier
 from app.llm.cost import get_meter
 
@@ -54,17 +56,39 @@ class AgentAnswer(BaseModel):
     row_count: int
     rejected: bool = False
     violations: list[str] = []
+    blocked_input: bool = False
+    output_redacted: bool = False
     cost_usd: float = 0.0
 
 
 class DataAgent:
-    def __init__(self, data_dir: str | Path, llm: LLMClient | None = None) -> None:
+    def __init__(
+        self,
+        data_dir: str | Path,
+        llm: LLMClient | None = None,
+        *,
+        guard_with_llm: bool = False,
+    ) -> None:
         self._connection = duckdb_over_csv(data_dir)
         self._catalog = build_catalog(self._connection)
         self._llm = llm or LLMClient()
+        self._guard_with_llm = guard_with_llm
 
     def ask(self, question: str) -> AgentAnswer:
         cost_before = get_meter().snapshot()["cost_usd"]
+
+        # 0. Input guardrail (layer 1): block prompt injection before anything runs.
+        guard = inspect_input(
+            question, llm=self._llm if self._guard_with_llm else None
+        )
+        if guard.blocked:
+            return AgentAnswer(
+                answer="This request was blocked by the security filter.",
+                sql="", citations=[], row_count=0,
+                rejected=True, blocked_input=True,
+                violations=[f"{guard.layer}: {guard.reason}"],
+                cost_usd=round(get_meter().snapshot()["cost_usd"] - cost_before, 6),
+            )
 
         # 1. Retrieve relevant schema cards.
         cards = retrieve(question, self._catalog)
@@ -109,12 +133,16 @@ class DataAgent:
             system="You summarize query results precisely. Never invent values.",
         )
 
+        # 6. Output guardrail (layer 4): redact restricted PII from the answer.
+        output_scan = inspect_output(synthesis.text.strip())
+
         citations = _citations_from_rows(generated.tables_used, cards, preview)
         return AgentAnswer(
-            answer=synthesis.text.strip(),
+            answer=output_scan.redacted_text,
             sql=result.sql,
             citations=citations,
             row_count=len(rows),
+            output_redacted=not output_scan.safe,
             cost_usd=round(get_meter().snapshot()["cost_usd"] - cost_before, 6),
         )
 
