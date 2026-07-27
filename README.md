@@ -51,6 +51,6 @@ Interactive API docs: http://localhost:8000/docs
 | 3 | PII module: detection, fuzzy search, deterministic pseudonymization | done |
 | 4 | Agent: schema retrieval, SQL generation, sqlglot policy, citations | done |
 | 5 | Guardrails: injection filter (in), PII scan (out) | done |
-| 6 | Eval panel: golden dataset, live metrics | next |
-| 7 | Angular frontend | |
+| 6 | Eval panel: golden dataset, live metrics | done |
+| 7 | Angular frontend | next |
 | 8 | AWS deploy, pitch deck, rehearsal | |
