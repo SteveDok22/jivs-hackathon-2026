@@ -52,5 +52,5 @@ Interactive API docs: http://localhost:8000/docs
 | 4 | Agent: schema retrieval, SQL generation, sqlglot policy, citations | done |
 | 5 | Guardrails: injection filter (in), PII scan (out) | done |
 | 6 | Eval panel: golden dataset, live metrics | done |
-| 7 | Angular frontend | next |
-| 8 | AWS deploy, pitch deck, rehearsal | |
+| 7 | Angular frontend (chat + citations, live metrics panel) | done |
+| 8 | AWS deploy, pitch deck, rehearsal | next |
