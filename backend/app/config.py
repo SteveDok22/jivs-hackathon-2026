@@ -24,6 +24,9 @@ class Settings(BaseSettings):
     # Rotate per environment; in production this lives in a KMS, not in .env.
     pii_secret_key: str = "change-me-before-the-event"
 
+    # CORS: origins allowed to call the API (Angular dev server by default).
+    cors_origins: list[str] = ["http://localhost:4200"]
+
     # Guardrails
     guardrails_use_llm: bool = False  # enable the LLM injection classifier layer
 
