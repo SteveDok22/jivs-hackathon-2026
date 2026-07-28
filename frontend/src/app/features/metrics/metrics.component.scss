@@ -1,0 +1,51 @@
+.metrics {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.25rem;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+header h2 {
+  margin: 0;
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-dim);
+}
+header button {
+  padding: 0.5rem 1rem;
+  background: transparent;
+  border: 1px solid var(--gold);
+  color: var(--gold);
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+header button:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 1rem;
+}
+.metric {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 1rem;
+  background: var(--surface-2);
+  border-radius: 10px;
+}
+.label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-dim); }
+.value { font-size: 1.8rem; font-weight: 700; font-family: var(--mono); }
+.value.verified { color: var(--verified); }
+.value.blocked  { color: var(--blocked); }
+.sub { font-size: 0.72rem; color: var(--text-dim); }
+
+.footnote, .empty { color: var(--text-dim); font-size: 0.8rem; margin-top: 1rem; }

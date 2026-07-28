@@ -1,0 +1,47 @@
+/* ── Design tokens ────────────────────────────────────────────────────
+   Grounded in JiVS branding: warm gold accent on deep ink, the palette
+   from the hackathon banners. Semantic colors carry security meaning:
+   verified (teal), redacted (amber), blocked (red). */
+:root {
+  --ink:        #0d1117;   /* page background, deep ink */
+  --surface:    #161b22;   /* cards, panels */
+  --surface-2:  #1c2230;   /* raised elements, code blocks */
+  --border:     #2a3140;
+  --text:       #e6edf3;
+  --text-dim:   #8b949e;
+
+  --gold:       #c8a24b;   /* JiVS brand accent */
+  --gold-soft:  #3a3016;
+  --verified:   #3fb950;   /* safe / passed */
+  --redacted:   #d29922;   /* PII redacted */
+  --blocked:    #f85149;   /* injection blocked / rejected */
+
+  --mono: 'JetBrains Mono', 'SF Mono', ui-monospace, monospace;
+  --sans: 'Inter', -apple-system, system-ui, sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  background: var(--ink);
+  color: var(--text);
+  font-family: var(--sans);
+  line-height: 1.55;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .fade-in { animation: fade 0.25s ease-out; }
+  @keyframes fade { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; } }
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+button:focus-visible, input:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+}
+
+code, pre { font-family: var(--mono); }

@@ -1,0 +1,89 @@
+.chat { display: flex; flex-direction: column; gap: 1.25rem; }
+
+.ask {
+  display: flex;
+  gap: 0.5rem;
+}
+.ask input {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  font-size: 0.95rem;
+}
+.ask button {
+  padding: 0.75rem 1.5rem;
+  background: var(--gold);
+  color: var(--ink);
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+}
+.ask button:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.error { color: var(--blocked); }
+
+.answer {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.25rem;
+}
+
+.badges { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.75rem; }
+.badge {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+  text-transform: uppercase;
+}
+.badge.verified { background: rgba(63,185,80,0.15); color: var(--verified); }
+.badge.redacted { background: rgba(210,153,34,0.15); color: var(--redacted); }
+.badge.blocked  { background: rgba(248,81,73,0.15);  color: var(--blocked); }
+.badge.cost     { background: var(--surface-2); color: var(--text-dim); font-family: var(--mono); }
+
+.text { font-size: 1.05rem; margin: 0.5rem 0 1rem; }
+
+.violations { color: var(--blocked); font-size: 0.85rem; margin: 0 0 1rem; padding-left: 1.2rem; }
+
+details {
+  border-top: 1px solid var(--border);
+  padding-top: 0.75rem;
+  margin-top: 0.75rem;
+}
+summary {
+  cursor: pointer;
+  color: var(--text-dim);
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+pre {
+  background: var(--surface-2);
+  padding: 0.85rem;
+  border-radius: 8px;
+  overflow-x: auto;
+  font-size: 0.85rem;
+  color: var(--gold);
+}
+
+.citation h4 {
+  margin: 0.75rem 0 0.35rem;
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  color: var(--gold);
+}
+table { width: 100%; border-collapse: collapse; font-size: 0.78rem; }
+th, td {
+  text-align: left;
+  padding: 0.3rem 0.5rem;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+th { color: var(--text-dim); font-weight: 600; }
+td { font-family: var(--mono); }
