@@ -1,0 +1,7 @@
+{
+  "/agent": { "target": "http://localhost:8000", "secure": false },
+  "/eval": { "target": "http://localhost:8000", "secure": false },
+  "/pii": { "target": "http://localhost:8000", "secure": false },
+  "/guardrails": { "target": "http://localhost:8000", "secure": false },
+  "/health": { "target": "http://localhost:8000", "secure": false }
+}
