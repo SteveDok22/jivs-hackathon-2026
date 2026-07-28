@@ -9,6 +9,7 @@ Each stage plugs its router in here:
 """
 
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.routes import agent, eval, guardrails, health, llm, pii
 from app.config import get_settings
@@ -19,6 +20,13 @@ app = FastAPI(
     title="Trusted Enterprise Agent",
     version=settings.version,
     description="JiVS Hackathon 2026 — secured AI agent over cleansed enterprise data.",
+)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=settings.cors_origins,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 app.include_router(health.router, tags=["system"])
