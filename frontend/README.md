@@ -1,59 +1,66 @@
-# Frontend
+# Frontend — Trusted Enterprise Agent (Angular 20)
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.3.32.
+The source files (`src/app`, `src/environments`, `src/styles.scss`,
+`proxy.conf.json`) are ready. They drop into a fresh Angular 20 workspace —
+we don't commit `node_modules` or the generated config, we generate those
+locally. One-time setup below.
 
-## Development server
+## One-time setup (each teammate, ~3 min)
 
-To start a local development server, run:
+    # 1. Angular CLI (Node 20+ required)
+    npm install -g @angular/cli@20
 
-```bash
-ng serve
-```
+    # 2. Generate the workspace scaffolding IN PLACE, in this frontend/ dir.
+    #    --skip-install first so we can merge our files before installing.
+    cd frontend
+    ng new tea-ui --directory . --style=scss --routing=false \
+        --skip-git --skip-install --ssr=false
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+    # When prompted to overwrite src/main.ts, src/index.html, src/styles.scss,
+    # app.component/app.config — say YES (our versions replace the defaults).
+    # If ng refuses because the dir isn't empty, generate in a temp dir and
+    # copy OUR src/ over its src/ afterwards (see "Fallback" below).
 
-## Code scaffolding
+    # 3. Install dependencies
+    npm install
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+    # 4. Run against the backend (backend must be up on :8000)
+    npm start -- --proxy-config proxy.conf.json
 
-```bash
-ng generate component component-name
-```
+Open http://localhost:4200. Ask a question, then hit "Run evaluation".
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+## Fallback if `ng new` won't scaffold into a non-empty dir
 
-```bash
-ng generate --help
-```
+    cd ~/PROJECTs/jivs-hackathon-2026
+    mv frontend frontend-src            # our source, temporarily aside
+    ng new frontend --directory frontend --style=scss --routing=false --ssr=false
+    cp -a frontend-src/src/. frontend/src/
+    cp frontend-src/proxy.conf.json frontend/
+    rm -rf frontend-src
+    cd frontend && npm start -- --proxy-config proxy.conf.json
 
-## Building
+## Wire the proxy into `npm start` permanently (optional)
 
-To build the project run:
+In `angular.json`, under `projects > <name> > architect > serve > options`, add:
 
-```bash
-ng build
-```
+    "proxyConfig": "proxy.conf.json"
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+Then plain `npm start` uses the proxy.
 
-## Running unit tests
+## What's here
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+    src/app/core/models.ts        TypeScript mirrors of the backend responses
+    src/app/core/api.service.ts   single gateway to the FastAPI backend
+    src/app/features/chat/        agent console: question -> cited answer + badges
+    src/app/features/metrics/     live eval panel (PII F1, catch rate, zero-leak)
+    src/styles.scss               theme tokens (JiVS gold on ink)
+    src/environments/             dev (proxy) vs prod (deployed API URL)
+    proxy.conf.json               dev proxy -> localhost:8000 (avoids CORS)
 
-```bash
-ng test
-```
+## Angular version note
 
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+Written for Angular 20: standalone components, signals, new control flow
+(`@if`/`@for`), zoneless change detection. If the event pins a different
+major, the only likely fixes are `provideZonelessChangeDetection` (name
+changed across versions) and the control-flow syntax. Keep this in mind
+if we must match a JiVS-specified version on the day.
