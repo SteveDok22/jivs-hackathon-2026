@@ -53,4 +53,4 @@ Interactive API docs: http://localhost:8000/docs
 | 5 | Guardrails: injection filter (in), PII scan (out) | done |
 | 6 | Eval panel: golden dataset, live metrics | done |
 | 7 | Angular frontend (chat + citations, live metrics panel) | done |
-| 8 | AWS deploy, pitch deck, rehearsal | next |
+| 8 | AWS deploy (Dockerfile, App Runner), pitch deck, runbook | done |
