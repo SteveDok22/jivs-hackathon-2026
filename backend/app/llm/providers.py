@@ -23,6 +23,7 @@ class Provider(Protocol):
         prompt: str,
         max_tokens: int,
         cache_system: bool,
+        image_b64: str | None = None,
     ) -> LLMResult: ...
 
 
@@ -40,11 +41,27 @@ class AnthropicProvider:
         prompt: str,
         max_tokens: int,
         cache_system: bool,
+        image_b64: str | None = None,
     ) -> LLMResult:
+        if image_b64 is not None:
+            # Vision message: image block followed by the text prompt.
+            content: list | str = [
+                {
+                    "type": "image",
+                    "source": {
+                        "type": "base64",
+                        "media_type": "image/png",
+                        "data": image_b64,
+                    },
+                },
+                {"type": "text", "text": prompt},
+            ]
+        else:
+            content = prompt
         kwargs: dict = {
             "model": model,
             "max_tokens": max_tokens,
-            "messages": [{"role": "user", "content": prompt}],
+            "messages": [{"role": "user", "content": content}],
         }
         if system:
             if cache_system:
@@ -81,7 +98,13 @@ class BedrockProvider:
         prompt: str,
         max_tokens: int,
         cache_system: bool,  # noqa: ARG002 — caching config differs on Bedrock; TODO on-site
+        image_b64: str | None = None,
     ) -> LLMResult:
+        if image_b64 is not None:
+            raise NotImplementedError(
+                "Image input via Bedrock is not wired yet; use LLM_PROVIDER=anthropic "
+                "for the refactoring vision step."
+            )
         kwargs: dict = {
             "modelId": model,
             "messages": [{"role": "user", "content": [{"text": prompt}]}],
@@ -118,6 +141,7 @@ class FakeProvider:
         prompt: str,
         max_tokens: int,
         cache_system: bool,
+        image_b64: str | None = None,
     ) -> LLMResult:
         self.calls.append(
             {
@@ -126,6 +150,7 @@ class FakeProvider:
                 "prompt": prompt,
                 "max_tokens": max_tokens,
                 "cache_system": cache_system,
+                "has_image": image_b64 is not None,
             }
         )
         index = min(len(self.calls) - 1, len(self._responses) - 1)
