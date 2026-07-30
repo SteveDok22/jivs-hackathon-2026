@@ -69,6 +69,7 @@ class LLMClient:
         system: str = "",
         max_tokens: int = 1024,
         cache_system: bool = False,
+        image_b64: str | None = None,
     ) -> LLMResult:
         model = self._models[tier]
         result = self._provider.complete(
@@ -77,6 +78,7 @@ class LLMClient:
             prompt=prompt,
             max_tokens=max_tokens,
             cache_system=cache_system,
+            image_b64=image_b64,
         )
         get_meter().record(model, result.usage)
         return result
@@ -89,6 +91,7 @@ class LLMClient:
         tier: Tier = Tier.SMART,
         system: str = "",
         max_tokens: int = 2048,
+        image_b64: str | None = None,
     ) -> T:
         """Ask for JSON matching `schema`; validate; retry once on failure."""
         json_schema = json.dumps(schema.model_json_schema(), indent=2)
@@ -99,7 +102,8 @@ class LLMClient:
             f"{json_schema}"
         )
         result = self.complete(
-            instruction, tier=tier, system=system, max_tokens=max_tokens
+            instruction, tier=tier, system=system, max_tokens=max_tokens,
+            image_b64=image_b64,
         )
         try:
             return schema.model_validate_json(_extract_json(result.text))
