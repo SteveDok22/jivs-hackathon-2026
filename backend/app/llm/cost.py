@@ -15,9 +15,13 @@ from app.llm.schemas import Usage
 
 # Keys are substrings: "haiku" matches "claude-haiku-4-5-20251001" and
 # Bedrock IDs like "anthropic.claude-haiku-4-5-v1:0" alike.
+# USD per million tokens (input, output). Verified against Anthropic pricing
+# July 2026: Haiku 4.5 = $1/$5, Sonnet 5 = $2/$10 (introductory through
+# 2026-08-31). Substring keys match versioned IDs and Bedrock IDs alike.
 PRICES_PER_MTOK: dict[str, tuple[float, float]] = {
     "haiku": (1.00, 5.00),
-    "sonnet": (3.00, 15.00),
+    "sonnet": (2.00, 10.00),
+    "opus": (5.00, 25.00),
 }
 DEFAULT_PRICE: tuple[float, float] = (3.00, 15.00)
 
