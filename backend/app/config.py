@@ -43,13 +43,13 @@ class Settings(BaseSettings):
     # Anthropic API (direct)
     anthropic_api_key: str = ""
     llm_fast_model: str = "claude-haiku-4-5-20251001"
-    llm_smart_model: str = "claude-sonnet-4-6"
+    llm_smart_model: str = "claude-sonnet-5"
 
     # AWS Bedrock (sponsor credits). Verify exact model IDs in the AWS
     # console on hackathon day — they vary by region and account.
     aws_region: str = "eu-central-1"
     bedrock_fast_model_id: str = "anthropic.claude-haiku-4-5-v1:0"
-    bedrock_smart_model_id: str = "anthropic.claude-sonnet-4-6-v1:0"
+    bedrock_smart_model_id: str = "anthropic.claude-sonnet-5-v1:0"
 
 
 @lru_cache
