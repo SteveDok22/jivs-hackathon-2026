@@ -11,7 +11,7 @@ Each stage plugs its router in here:
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.api.routes import agent, eval, guardrails, health, llm, pii
+from app.api.routes import agent, eval, guardrails, health, llm, pii, refactor
 from app.config import get_settings
 
 settings = get_settings()
@@ -35,8 +35,10 @@ app.include_router(pii.router, tags=["pii"])
 app.include_router(agent.router, tags=["agent"])
 app.include_router(guardrails.router, tags=["guardrails"])
 app.include_router(eval.router, tags=["eval"])
+app.include_router(refactor.router, tags=["refactor"])
 app.include_router(llm.router, tags=["llm"])
 app.include_router(pii.router, tags=["pii"])
 app.include_router(agent.router, tags=["agent"])
 app.include_router(guardrails.router, tags=["guardrails"])
 app.include_router(eval.router, tags=["eval"])
+app.include_router(refactor.router, tags=["refactor"])
