@@ -54,3 +54,4 @@ Interactive API docs: http://localhost:8000/docs
 | 6 | Eval panel: golden dataset, live metrics | done |
 | 7 | Angular frontend (chat + citations, live metrics panel) | done |
 | 8 | AWS deploy (Dockerfile, App Runner), pitch deck, runbook | done |
+| 9 | Legacy refactoring: screenshot -> Angular, self-check fidelity loop | done |
