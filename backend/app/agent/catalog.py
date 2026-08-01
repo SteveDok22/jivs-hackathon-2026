@@ -86,6 +86,10 @@ def retrieve(question: str, cards: list[TableCard], *, top_k: int = 3) -> list[T
         for token in question_lower.split():
             if len(token) > 3 and token in document:
                 score += 15
+        # An exact table-name mention is a strong signal — a short name like
+        # "kna1" gets diluted by fuzzy scoring, so boost it decisively.
+        if card.name.lower() in question_lower:
+            score += 100
         scored.append((score, card))
     scored.sort(key=lambda pair: pair[0], reverse=True)
     return [card for _, card in scored[:top_k]]
