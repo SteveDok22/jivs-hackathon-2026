@@ -104,8 +104,14 @@ class DataAgent:
             system=system,
         )
 
-        # 3. Policy barrier.
-        result = check(generated.sql, allowed_tables=[card.name for card in cards])
+        # 3. Policy barrier. The allowlist is the FULL catalog, not just the
+        # retrieved cards: retrieval decides what schema to show the model,
+        # but every real table is legitimately queryable. Checking against the
+        # retrieved subset alone would reject valid SQL whenever ranking is
+        # imperfect (e.g. a short table name diluted by fuzzy scoring).
+        result = check(
+            generated.sql, allowed_tables=[card.name for card in self._catalog]
+        )
         if not result.allowed:
             return AgentAnswer(
                 answer="The requested query is not permitted under the data access policy.",
