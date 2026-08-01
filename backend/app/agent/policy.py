@@ -57,11 +57,19 @@ def check(sql: str, *, allowed_tables: list[str]) -> PolicyResult:
         if column.name.lower() in denied_columns:
             violations.append(f"restricted column: {column.name}")
 
-    if any(isinstance(node, exp.Star) for node in statement.find_all(exp.Star)):
-        # SELECT * could silently leak restricted columns.
-        violations.append(
-            "SELECT * is not allowed; list the columns you need explicitly"
-        )
+    # Reject SELECT * (bare star in the projection) because it could leak
+    # restricted columns. But COUNT(*) and other aggregates over * are safe —
+    # the star there is a row marker, not a column projection. So we only
+    # flag a Star whose parent is the SELECT itself, not a function call.
+    for star in statement.find_all(exp.Star):
+        parent = star.parent
+        if isinstance(parent, exp.Column):
+            parent = parent.parent
+        if not isinstance(parent, (exp.Count, exp.Func)):
+            violations.append(
+                "SELECT * is not allowed; list the columns you need explicitly"
+            )
+            break
 
     if violations:
         return PolicyResult(allowed=False, sql=sql, violations=sorted(set(violations)))
