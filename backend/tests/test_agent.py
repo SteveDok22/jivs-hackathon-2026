@@ -106,3 +106,38 @@ def test_agent_rejects_policy_violation_end_to_end(tmp_path) -> None:
     assert answer.row_count == 0
     assert any("restricted column" in violation for violation in answer.violations)
     assert "not permitted" in answer.answer
+
+
+# ── Stage 10 fixes: COUNT(*) allowed, allowlist is full catalog ──────
+
+def test_policy_allows_count_star() -> None:
+    """COUNT(*) is an aggregate, not a column projection — must be allowed."""
+    result = check("SELECT COUNT(*) FROM kna1", allowed_tables=ALL_TABLES)
+    assert result.allowed, result.violations
+    assert "LIMIT" in result.sql
+
+
+def test_policy_still_rejects_bare_select_star() -> None:
+    result = check("SELECT * FROM kna1", allowed_tables=ALL_TABLES)
+    assert not result.allowed
+    assert any("SELECT *" in v for v in result.violations)
+
+
+def test_policy_allows_count_star_with_other_aggregates() -> None:
+    result = check(
+        "SELECT COUNT(*) AS n, MAX(WRBTR) AS mx FROM bseg", allowed_tables=ALL_TABLES
+    )
+    assert result.allowed, result.violations
+
+
+def test_agent_count_query_uses_full_catalog_allowlist(tmp_path) -> None:
+    """A COUNT(*) on a real table must pass even if retrieval ranked it low."""
+    data_dir = generate(tmp_path, seed=42)
+    llm = _scripted_llm("SELECT COUNT(*) AS total FROM kna1")
+    # Force retrieval to return the WRONG cards, proving the allowlist no
+    # longer depends on retrieval: the query on kna1 must still be allowed.
+    agent = DataAgent(data_dir, llm=llm)
+    answer = agent.ask("How many customers are there in total?")
+
+    assert not answer.rejected, answer.violations
+    assert answer.row_count == 1
