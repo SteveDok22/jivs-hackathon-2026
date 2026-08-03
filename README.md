@@ -41,6 +41,83 @@ Interactive API docs: http://localhost:8000/docs
     pip install -e ".[dev]"
     pytest -v
 
+## Debugging & Fixes
+
+Real issues encountered while building this project and how they were resolved.
+Kept as an engineering log — each entry is a symptom, the root cause, and the fix.
+
+**1. Duplicate LLM layer (Stage 1).**
+*Symptom:* two parallel implementations of the LLM client appeared in `app/llm/`
+(a `base.py`/`factory.py`/`pricing.py` set alongside `client.py`/`cost.py`).
+*Cause:* a stray earlier iteration left behind a second module set; either could
+be imported, risking hard-to-trace bugs at runtime.
+*Fix:* kept one implementation, merged the two good ideas from the other
+(substring-based pricing keys, a cached client factory), deleted the rest so the
+codebase has exactly one LLM path.
+
+**2. `setuptools` multiple-packages error (Stage 2).**
+*Symptom:* `pip install -e .` failed with *"Multiple top-level packages discovered
+in a flat-layout: ['app', 'data']"*.
+*Cause:* generating the dataset into `backend/data/` made setuptools see a second
+top-level package and refuse to guess which to build.
+*Fix:* pinned discovery to the real package with
+`[tool.setuptools.packages.find] include = ["app*"]`.
+
+**3. PII recall stuck at 0.75 (Stage 3).**
+*Symptom:* four ground-truth occurrences were missed — all names hidden in free
+text with typos or cross-language spellings ("Paul Jnoas", "Kowaljow").
+*Cause:* `token_set_ratio` over the whole sentence collapses when the misspelled
+token drops out of the exact-token intersection; and Latin/Cyrillic/German
+spellings of one name scored near zero.
+*Fix:* added a sliding-window fuzzy match at the target's token width, plus
+transliteration folds (w->v, j->y) applied to both sides of every comparison.
+Recall went to 1.00 on the golden set.
+
+**4. DuckDB `CREATE VIEW` with a bound parameter (Stage 2).**
+*Symptom:* building views over the CSV files threw a binder error.
+*Cause:* DuckDB does not accept prepared-statement parameters in `CREATE VIEW`.
+*Fix:* switched to an escaped string literal for the file path (still safe — the
+value is a local filename, not user input).
+
+**5. Model string 404 risk (Stage 9).**
+*Symptom:* the smart-tier model was `claude-sonnet-4-6`, which would fail once a
+real API key was used.
+*Cause:* the current model is `claude-sonnet-5` (released 2026-06-30); the code
+carried an outdated string.
+*Fix:* updated the config default and pricing table; verified against current
+Anthropic pricing.
+
+**6. Container ran stale code — `ModuleNotFoundError: sqlglot` (Stage 4, live).**
+*Symptom:* the API container crash-looped; `/health` and `/eval` hung.
+*Cause:* new dependencies were added to `pyproject.toml`, but the container was
+restarted with `docker compose up` (no `--build`), so the image predated them.
+*Fix:* rebuild with `docker compose up -d --build` after any dependency change —
+now a documented rule.
+
+**7. Env var not picked up after editing `.env` (live).**
+*Symptom:* agent calls failed with *"Could not resolve authentication method"*
+even though `ANTHROPIC_API_KEY` was set in `.env`.
+*Cause:* `docker compose restart` reuses the existing container's environment; it
+does not re-read `env_file`.
+*Fix:* use `docker compose up -d --force-recreate api` to recreate the container
+and reload `.env`.
+
+**8. Valid `COUNT(*)` query rejected by the policy (Stage 10).**
+*Symptom:* `SELECT COUNT(*) FROM kna1` was blocked with *"SELECT * is not allowed"*.
+*Cause:* the policy flagged any `Star` node, not distinguishing a bare
+`SELECT *` projection from a `COUNT(*)` aggregate.
+*Fix:* only reject a star whose parent is the SELECT itself; stars inside function
+calls (COUNT and other aggregates) are allowed.
+
+**9. Valid table rejected as "not on allowlist" (Stage 10).**
+*Symptom:* `SELECT COUNT(*) FROM kna1` failed with *"table not on allowlist: kna1"*
+even though `kna1` is a real table.
+*Cause:* the policy allowlist was built from the top-k *retrieved* schema cards, so
+a valid query was rejected whenever retrieval ranked the right table below the cut.
+*Fix:* separated concerns — retrieval decides what schema to *show* the model, but
+the allowlist is the *full* catalog of real tables. Also boosted exact
+table-name mentions in retrieval so short names like `kna1` surface reliably.
+
 ## Roadmap
 
 | Stage | Module | Status |
