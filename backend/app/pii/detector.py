@@ -1,17 +1,28 @@
 """Structured PII detection: emails, phone numbers, IBANs, person names.
 
 Two engines behind one function:
-- Presidio + spaCy NER when installed (full power, used at the event);
-- pure-regex fallback (emails, phones, IBANs) that always works — CI and
-  teammates without the spaCy model stay green.
+- Presidio + spaCy NER for person names (statistical, catches names the
+  fuzzy target-list search cannot — unknown people, not just our watch list);
+- pure-regex for emails, phones, IBANs (deterministic, always available).
 
-The public result type is ours, not Presidio's, so swapping engines
-never touches callers.
+The regex layer always runs. The Presidio layer runs when its spaCy model
+is installed; if the model is missing, detection degrades to regex-only
+instead of crashing — CI and teammates without the model stay green. The
+public result type is ours, not Presidio's, so swapping engines never
+touches callers.
+
+Model note: we pin the small model (en_core_web_sm, ~12 MB) explicitly
+rather than relying on Presidio's default (en_core_web_lg, ~560 MB). The
+small model's accuracy on person names is close, and the size difference
+matters for the Docker image and CI. Install it with:
+    python -m spacy download en_core_web_sm
 """
 
 import re
 from dataclasses import dataclass
 from functools import lru_cache
+
+from app.config import get_settings
 
 _EMAIL = re.compile(r"[\w.+-]+@[\w-]+\.[\w.]+")
 _PHONE = re.compile(r"(?:\+?\d[\d\s()/-]{7,}\d)")
@@ -30,13 +41,30 @@ class PIIEntity:
 
 @lru_cache
 def _presidio_analyzer():
-    """Build the Presidio engine once, or return None if unavailable."""
+    """Build the Presidio engine once with an explicit spaCy model.
+
+    Returns None (not an exception) if Presidio or the model is unavailable,
+    so callers degrade to regex-only detection gracefully.
+    """
     try:
         from presidio_analyzer import AnalyzerEngine
+        from presidio_analyzer.nlp_engine import NlpEngineProvider
 
-        return AnalyzerEngine()
+        model = get_settings().presidio_spacy_model
+        provider = NlpEngineProvider(
+            nlp_configuration={
+                "nlp_engine_name": "spacy",
+                "models": [{"lang_code": "en", "model_name": model}],
+            }
+        )
+        return AnalyzerEngine(nlp_engine=provider.create_engine())
     except Exception:
         return None
+
+
+def presidio_available() -> bool:
+    """True when the NER engine is loaded — surfaced on the eval report."""
+    return _presidio_analyzer() is not None
 
 
 def detect(text: str, *, use_presidio: bool = True) -> list[PIIEntity]:
