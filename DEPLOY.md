@@ -65,7 +65,7 @@ Give the App Runner / Fargate task role `bedrock:InvokeModel` permission.
 - [ ] Node 20 LTS via nvm on every laptop (current v25 is non-LTS).
 - [ ] `docker compose -f docker-compose.full.yml up` works end to end.
 - [ ] AWS account with CLI configured; ECR repos created; App Runner tried once.
-- [ ] spaCy models + AdventureWorks downloaded (offline Wi-Fi insurance).
+- [ ] spaCy model en_core_web_sm installed (`python -m spacy download en_core_web_sm`); AdventureWorks downloaded.
 - [ ] ODBC Driver 18 installed (Azure SQL access, their 2025 setup).
 - [ ] Each member has run the full test suite once and seen the eval report.
 - [ ] Pitch deck skeleton filled with our real numbers.
