@@ -34,6 +34,8 @@ class PIIEval:
     name_detection: PRF
     persons_found: int
     persons_expected: int
+    presidio_available: bool = False
+    persons_discovered: int = 0   # ALL names found by NER, beyond the watch-list
 
 
 @dataclass
@@ -92,12 +94,23 @@ def _eval_pii(data_dir: Path) -> tuple[PIIEval, int]:
     false_positives = len(found_locations - expected_locations)
     false_negatives = len(expected_locations - found_locations)
 
+    # Discovery: how many distinct persons Presidio NER finds across the whole
+    # dataset (not just the watch-list). Demonstrates the "find all names"
+    # capability regex cannot provide. Degrades to 0 if the model is absent.
+    from app.pii.detector import presidio_available
+    from app.pii.service import discover_persons
+
+    ner_ready = presidio_available()
+    discovered = len({f.value for f in discover_persons(data_dir)}) if ner_ready else 0
+
     total_records = sum(1 for _ in (data_dir / "kna1.csv").read_text().splitlines()) - 1
     return (
         PIIEval(
             name_detection=prf(true_positives, false_positives, false_negatives),
             persons_found=len({f.matched_person for f in findings if f.matched_person}),
             persons_expected=len(TARGETS),
+            presidio_available=ner_ready,
+            persons_discovered=discovered,
         ),
         total_records,
     )
