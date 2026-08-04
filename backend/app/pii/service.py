@@ -48,6 +48,39 @@ def _iter_tables(directory: Path):
             yield csv_path.stem, list(csv.DictReader(handle))
 
 
+def discover_persons(
+    directory: str | Path,
+    *,
+    min_score: float = 0.6,
+) -> list[Finding]:
+    """Find ALL person names across the dataset via Presidio NER.
+
+    This is the capability regex cannot provide and the fuzzy target search
+    does not cover: `scan` finds people you are looking for; `discover_persons`
+    finds people you did not know were there. It answers the 2025 objective
+    "find all personal names in multiple databases" rather than "search for
+    specific names". Falls back to empty if the NER engine is unavailable.
+    """
+    findings: list[Finding] = []
+    for table, rows in _iter_tables(Path(directory)):
+        for row in rows:
+            key = _row_key(table, row)
+            for column, cell in row.items():
+                if not cell or column not in (NAME_COLUMNS | TEXT_COLUMNS):
+                    continue
+                for entity in detect(cell, use_presidio=True):
+                    if entity.pii_type != "PERSON_NAME" or entity.score < min_score:
+                        continue
+                    findings.append(
+                        Finding(
+                            table=table, row_key=key, column=column, value=entity.value,
+                            matched_person=entity.value, score=entity.score * 100,
+                            pii_type="PERSON_NAME", method=entity.engine,
+                        )
+                    )
+    return findings
+
+
 def scan(
     directory: str | Path,
     targets: list[str],
@@ -84,8 +117,9 @@ def scan(
                                     pii_type="PERSON_NAME", method=match.method,
                                 )
                             )
-                # Structured PII (emails, phones, IBANs) — regex engine only here:
-                # fast and deterministic. Presidio NER joins at the event.
+                # Structured PII (emails, phones, IBANs) via regex: fast and
+                # deterministic. Person-name NER is handled by discover_persons()
+                # and the fuzzy target search above, not here.
                 for entity in detect(cell, use_presidio=False):
                     findings.append(
                         Finding(
