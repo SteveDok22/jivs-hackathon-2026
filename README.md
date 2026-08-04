@@ -133,3 +133,4 @@ table-name mentions in retrieval so short names like `kna1` surface reliably.
 | 8 | AWS deploy (Dockerfile, App Runner), pitch deck, runbook | done |
 | 9 | Legacy refactoring: screenshot -> Angular, self-check fidelity loop | done |
 | 10 | Agent polish: COUNT(*) allowed, allowlist = full catalog, name-boosted retrieval | done |
+| 11 | Real Presidio NER: person discovery (169 names found), model in image + CI | done |
