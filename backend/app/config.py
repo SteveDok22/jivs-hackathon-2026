@@ -27,6 +27,10 @@ class Settings(BaseSettings):
     # CORS: origins allowed to call the API (Angular dev server by default).
     cors_origins: list[str] = ["http://localhost:4200"]
 
+    # PII detection: spaCy model for Presidio NER (small by default; pin
+    # en_core_web_lg for higher recall if the image size allows).
+    presidio_spacy_model: str = "en_core_web_sm"
+
     # Guardrails
     guardrails_use_llm: bool = False  # enable the LLM injection classifier layer
 
