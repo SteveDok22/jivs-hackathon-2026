@@ -32,6 +32,8 @@ export interface EvalReport {
     name_detection: PRF;
     persons_found: number;
     persons_expected: number;
+    presidio_available: boolean;
+    persons_discovered: number;
   };
   guardrails: {
     catch_rate: number;
@@ -49,6 +51,12 @@ export interface EvalReport {
   cost: {
     records_processed: number;
     usd_per_1000_records: number;
+  };
+  refactor: {
+    verifier_correct: boolean;
+    perfect_score: number;
+    missing_detected: boolean;
+    extra_detected: boolean;
   };
   duration_seconds: number;
   generated_at: number;
