@@ -62,11 +62,24 @@ class CostEval:
 
 
 @dataclass
+class RefactorEval:
+    # Offline check of the fidelity verifier (the self-check loop's core).
+    # We do NOT call the LLM here — that needs a key and costs money. Instead
+    # we verify that compare_specs scores known cases correctly: a faithful
+    # reproduction scores 1.0, a missing field is caught, an extra is flagged.
+    verifier_correct: bool
+    perfect_score: float
+    missing_detected: bool
+    extra_detected: bool
+
+
+@dataclass
 class EvalReport:
     pii: PIIEval
     guardrails: GuardEval
     safety: SafetyEval
     cost: CostEval
+    refactor: RefactorEval
     duration_seconds: float
     generated_at: float = field(default_factory=time.time)
 
@@ -113,6 +126,41 @@ def _eval_pii(data_dir: Path) -> tuple[PIIEval, int]:
             persons_discovered=discovered,
         ),
         total_records,
+    )
+
+
+def _eval_refactor() -> RefactorEval:
+    """Verify the fidelity comparator on known cases — offline, no LLM."""
+    from app.refactor.schemas import UIField, UISpec
+    from app.refactor.service import compare_specs
+
+    target = UISpec(
+        title="Customer Form",
+        fields=[
+            UIField(type="input", label="Customer Name", name="customer_name"),
+            UIField(type="input", label="City", name="city"),
+            UIField(type="button", label="Save", name="save"),
+        ],
+    )
+    # Faithful reproduction -> score 1.0
+    perfect = compare_specs(target, target)
+    # Missing the "City" field -> that field reported missing
+    without_city = UISpec(title=target.title, fields=[target.fields[0], target.fields[2]])
+    missing = compare_specs(target, without_city)
+    # An extra invented field -> reported as extra
+    with_extra = UISpec(
+        title=target.title,
+        fields=[*target.fields, UIField(type="input", label="Ghost", name="ghost")],
+    )
+    extra = compare_specs(target, with_extra)
+
+    missing_detected = "city" in missing.missing
+    extra_detected = "ghost" in extra.extra
+    return RefactorEval(
+        verifier_correct=(perfect.score == 1.0 and missing_detected and extra_detected),
+        perfect_score=perfect.score,
+        missing_detected=missing_detected,
+        extra_detected=extra_detected,
     )
 
 
@@ -172,6 +220,7 @@ def run_evaluation(seed: int = 42, workdir: str | Path | None = None) -> EvalRep
     guard_eval = _eval_guardrails()
     safety_eval = _eval_safety(data_dir, clean_dir)
     cost_eval = _eval_cost(records)
+    refactor_eval = _eval_refactor()
 
     # Touch the pseudonymizer normalize path so the vault key format is
     # exercised in the same run (keeps eval and service in lockstep).
@@ -182,5 +231,6 @@ def run_evaluation(seed: int = 42, workdir: str | Path | None = None) -> EvalRep
         guardrails=guard_eval,
         safety=safety_eval,
         cost=cost_eval,
+        refactor=refactor_eval,
         duration_seconds=round(time.perf_counter() - started, 3),
     )
