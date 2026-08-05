@@ -134,3 +134,4 @@ table-name mentions in retrieval so short names like `kna1` surface reliably.
 | 9 | Legacy refactoring: screenshot -> Angular, self-check fidelity loop | done |
 | 10 | Agent polish: COUNT(*) allowed, allowlist = full catalog, name-boosted retrieval | done |
 | 11 | Real Presidio NER: person discovery (169 names found), model in image + CI | done |
+| 12 | Fidelity metric in eval panel + discovery/refactor cards in frontend | done |
