@@ -44,3 +44,13 @@ def test_report_is_stable_across_runs(tmp_path) -> None:
     b = run_evaluation(seed=42, workdir=tmp_path / "b")
     assert a.pii.name_detection.recall == b.pii.name_detection.recall
     assert a.guardrails.catch_rate == b.guardrails.catch_rate
+
+
+def test_refactor_eval_verifier_is_correct(tmp_path) -> None:
+    report = run_evaluation(seed=42, workdir=tmp_path)
+    # The fidelity verifier must score a faithful copy 1.0 and catch both
+    # a missing field and an extra one.
+    assert report.refactor.verifier_correct
+    assert report.refactor.perfect_score == 1.0
+    assert report.refactor.missing_detected
+    assert report.refactor.extra_detected
