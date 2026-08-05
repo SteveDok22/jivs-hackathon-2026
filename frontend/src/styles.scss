@@ -1,47 +1,165 @@
-/* ── Design tokens ────────────────────────────────────────────────────
-   Grounded in JiVS branding: warm gold accent on deep ink, the palette
-   from the hackathon banners. Semantic colors carry security meaning:
-   verified (teal), redacted (amber), blocked (red). */
+/* ═══════════════════════════════════════════════════════════════════════
+   AEGIS — global theme tokens.
+   The single source of truth in code; mirrors DESIGN.md. Components read
+   these variables and never hardcode colours or fonts.
+   ═══════════════════════════════════════════════════════════════════════ */
+
 :root {
-  --ink:        #0d1117;   /* page background, deep ink */
-  --surface:    #161b22;   /* cards, panels */
-  --surface-2:  #1c2230;   /* raised elements, code blocks */
-  --border:     #2a3140;
-  --text:       #e6edf3;
-  --text-dim:   #8b949e;
+  /* ── Colour ──────────────────────────────────────────────────────── */
+  --bg:          #0a0a0c;   /* near-black, cool tint */
+  --bg-raised:   #121216;   /* cards, panels */
+  --bg-elevated: #1a1a20;   /* raised elements, code */
+  --line:        #26262e;   /* borders, dividers */
 
-  --gold:       #c8a24b;   /* JiVS brand accent */
-  --gold-soft:  #3a3016;
-  --verified:   #3fb950;   /* safe / passed */
-  --redacted:   #d29922;   /* PII redacted */
-  --blocked:    #f85149;   /* injection blocked / rejected */
+  --red:         #e5322d;   /* primary signal accent */
+  --red-deep:    #7a1518;   /* darker gradient partner */
+  --red-glow:    #ff4d4d;   /* glow / hover / active nodes */
 
-  --mono: 'JetBrains Mono', 'SF Mono', ui-monospace, monospace;
-  --sans: 'Inter', -apple-system, system-ui, sans-serif;
+  --white:       #ffffff;   /* key numbers, outlines */
+  --white-neon:  #f5f5ff;   /* neon outline base */
+
+  --text:        #e8e8ec;   /* body */
+  --text-dim:    #8a8a94;   /* secondary, labels */
+
+  --verified:    #3fb950;   /* passed */
+  --amber:       #d29922;   /* redacted / caution */
+
+  /* ── Signature gradient & neon ───────────────────────────────────── */
+  --grad-red: linear-gradient(135deg, var(--red-deep) 0%, var(--red) 100%);
+  --glow-white: 0 0 12px rgba(255, 255, 255, 0.25);
+  --glow-red:   0 0 18px rgba(229, 50, 45, 0.35);
+
+  /* ── Typography ──────────────────────────────────────────────────── */
+  --font-head: 'Space Grotesk', -apple-system, system-ui, sans-serif;
+  --font-body: 'Inter', -apple-system, system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', monospace;
+
+  --fs-hero:  clamp(2.75rem, 6vw, 5.5rem);
+  --fs-h1:    clamp(2rem, 4vw, 3rem);
+  --fs-h2:    clamp(1.4rem, 2.5vw, 2rem);
+  --fs-body:  1.05rem;
+  --fs-small: 0.85rem;
+
+  /* ── Spacing (8px grid) ──────────────────────────────────────────── */
+  --space-1: 8px;   --space-2: 16px;  --space-3: 24px;  --space-4: 32px;
+  --space-6: 48px;  --space-8: 64px;  --space-12: 96px;
+
+  --maxw: 1200px;
+  --maxw-prose: 680px;
+
+  --radius: 12px;
+  --radius-lg: 20px;
+  --radius-pill: 999px;
+
+  /* ── Motion ──────────────────────────────────────────────────────── */
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --dur-micro: 150ms;
+  --dur: 300ms;
+  --dur-enter: 600ms;
 }
 
-* { box-sizing: border-box; }
+/* ── Reset ─────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
 
 html, body {
   margin: 0;
-  background: var(--ink);
+  background: var(--bg);
   color: var(--text);
-  font-family: var(--sans);
-  line-height: 1.55;
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .fade-in { animation: fade 0.25s ease-out; }
-  @keyframes fade { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; } }
+h1, h2, h3, h4 {
+  font-family: var(--font-head);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  margin: 0;
 }
 
-button {
-  font-family: inherit;
-  cursor: pointer;
-}
-button:focus-visible, input:focus-visible {
-  outline: 2px solid var(--gold);
-  outline-offset: 2px;
+/* Eyebrow / label style */
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: var(--fs-small);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-dim);
 }
 
-code, pre { font-family: var(--mono); }
+code, pre, .mono { font-family: var(--font-mono); }
+
+a { color: inherit; text-decoration: none; }
+
+button { font-family: inherit; cursor: pointer; }
+
+/* Visible focus ring for keyboard users */
+:focus-visible {
+  outline: 2px solid var(--white);
+  outline-offset: 3px;
+}
+
+/* ── Reusable atoms ────────────────────────────────────────────────── */
+.container { max-width: var(--maxw); margin: 0 auto; padding: 0 var(--space-3); }
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: 0.8rem 1.6rem;
+  border-radius: var(--radius-pill);
+  font-weight: 600;
+  border: 1px solid transparent;
+  transition: transform var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
+}
+.btn-primary {
+  background: var(--grad-red);
+  color: var(--white);
+}
+.btn-primary:hover { box-shadow: var(--glow-red); transform: translateY(-2px); }
+.btn-ghost {
+  background: transparent;
+  color: var(--text);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+.btn-ghost:hover { border-color: var(--white); box-shadow: var(--glow-white); }
+
+.card {
+  background: var(--bg-raised);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  transition: border-color var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
+}
+.card:hover { border-color: var(--red); box-shadow: var(--glow-red); }
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  padding: 0.25rem 0.7rem;
+  border-radius: var(--radius-pill);
+}
+.badge-red      { background: rgba(229, 50, 45, 0.15);  color: var(--red-glow); }
+.badge-verified { background: rgba(63, 185, 80, 0.15);  color: var(--verified); }
+.badge-amber    { background: rgba(210, 153, 34, 0.15); color: var(--amber); }
+
+/* ── Motion utilities ──────────────────────────────────────────────── */
+.reveal {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity var(--dur-enter) var(--ease), transform var(--dur-enter) var(--ease);
+}
+.reveal.is-visible { opacity: 1; transform: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+  .reveal { opacity: 1; transform: none; }
+}
