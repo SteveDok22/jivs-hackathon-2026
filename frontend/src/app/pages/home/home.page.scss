@@ -29,7 +29,7 @@ section { position: relative; }
 
 .lede {
   max-width: var(--maxw-prose);
-  margin: var(--space-3) 0 var(--space-4);
+  margin: var(--space-3) 0 0;
   font-size: 1.25rem;
   color: var(--text);
 }
@@ -52,3 +52,10 @@ section { position: relative; }
   text-align: center;
 }
 .cta h2 { margin-bottom: var(--space-4); }
+
+/* Hero content spacing for the richer layout */
+.hero-demo-wrap { margin: var(--space-3) 0; }
+.hero-flow { margin: var(--space-4) 0; max-width: 900px; }
+
+/* anim-in elements start hidden; JS reveals them (or reduced-motion shows them). */
+.anim-in { opacity: 0; }
