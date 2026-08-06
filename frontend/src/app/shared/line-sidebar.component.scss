@@ -1,0 +1,67 @@
+.rail {
+  position: fixed;
+  left: var(--space-3);
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 40;
+}
+
+/* Hide the rail on narrow screens — it needs horizontal room to breathe. */
+@media (max-width: 900px) {
+  .rail { display: none; }
+}
+
+ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+button {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: transparent;
+  border: none;
+  padding: 4px 0;
+  color: var(--text-dim);
+  transition: color var(--dur) var(--ease);
+}
+
+/* The tick: a short horizontal line that grows and turns white when active —
+   this is the "line" of the Line Sidebar. */
+.tick {
+  display: block;
+  width: 20px;
+  height: 2px;
+  background: var(--line);
+  transition: width var(--dur) var(--ease), background var(--dur) var(--ease),
+    box-shadow var(--dur) var(--ease);
+}
+
+.label {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  opacity: 0;
+  transform: translateX(-6px);
+  transition: opacity var(--dur) var(--ease), transform var(--dur) var(--ease);
+}
+
+/* Reveal the label on hover of the whole rail, or when active. */
+.rail:hover .label { opacity: 1; transform: none; }
+
+button:hover { color: var(--text); }
+button:hover .tick { width: 32px; background: var(--red); }
+
+button.active { color: var(--white); }
+button.active .tick {
+  width: 40px;
+  background: var(--white);
+  box-shadow: var(--glow-white);
+}
+button.active .label { opacity: 1; transform: none; }
