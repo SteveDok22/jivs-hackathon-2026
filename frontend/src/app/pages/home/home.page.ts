@@ -1,7 +1,10 @@
-import { Component } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import anime from 'animejs';
 import { LineSidebarComponent } from '../../shared/line-sidebar.component';
 import { NetworkBackgroundComponent } from '../../shared/network-background.component';
+import { FiveLayersComponent } from '../../shared/five-layers.component';
+import { HeroDemoComponent } from '../../shared/hero-demo.component';
 
 // AEGIS landing page. Stage 14 lays out the six-section spine as anchored
 // placeholders so the Line Sidebar and routing work end to end. Later stages
@@ -9,7 +12,13 @@ import { NetworkBackgroundComponent } from '../../shared/network-background.comp
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [RouterLink, LineSidebarComponent, NetworkBackgroundComponent],
+  imports: [
+    RouterLink,
+    LineSidebarComponent,
+    NetworkBackgroundComponent,
+    FiveLayersComponent,
+    HeroDemoComponent,
+  ],
   styleUrl: './home.page.scss',
   template: `
     <app-line-sidebar />
@@ -19,16 +28,25 @@ import { NetworkBackgroundComponent } from '../../shared/network-background.comp
       <section id="hero" class="hero">
         <app-network-bg />
         <div class="container hero-content">
-          <p class="eyebrow">Trusted Enterprise AI</p>
-          <h1 class="hero-title">
+          <p class="eyebrow anim-in">Trusted Enterprise AI</p>
+          <h1 class="hero-title anim-in">
             <span class="mark">AEGIS</span>
           </h1>
-          <p class="lede">
+          <p class="lede anim-in">
             Ask your enterprise archive in plain language. Every answer cited,
             every access controlled, every threat filtered. Built for secure
             organizations.
           </p>
-          <div class="actions">
+
+          <div class="hero-demo-wrap anim-in">
+            <app-hero-demo />
+          </div>
+
+          <div class="hero-flow anim-in">
+            <app-five-layers />
+          </div>
+
+          <div class="actions anim-in">
             <a routerLink="/app" class="btn btn-primary">Open the console</a>
             <a href="#how" class="btn btn-ghost">See how it works</a>
           </div>
@@ -97,4 +115,26 @@ import { NetworkBackgroundComponent } from '../../shared/network-background.comp
     </main>
   `,
 })
-export class HomePage {}
+export class HomePage implements AfterViewInit {
+  private readonly host = inject(ElementRef<HTMLElement>);
+
+  ngAfterViewInit(): void {
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const targets = this.host.nativeElement.querySelectorAll('.hero .anim-in');
+
+    if (reduced) {
+      targets.forEach((el: Element) => ((el as HTMLElement).style.opacity = '1'));
+      return;
+    }
+
+    // Staggered entrance: each hero element fades and rises in sequence.
+    anime({
+      targets: targets,
+      opacity: [0, 1],
+      translateY: [20, 0],
+      delay: anime.stagger(120, { start: 150 }),
+      duration: 700,
+      easing: 'easeOutExpo',
+    });
+  }
+}
