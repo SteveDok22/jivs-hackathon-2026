@@ -1,0 +1,78 @@
+.flow { width: 100%; }
+
+.track {
+  position: relative;
+  height: 2px;
+  margin: 0 auto var(--space-3);
+  width: calc(100% - 40px);
+}
+.line {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, var(--line) 10%, var(--line) 90%, transparent);
+}
+.dot {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 12px;
+  height: 12px;
+  margin: -6px 0 0 -6px;
+  border-radius: 50%;
+  background: var(--red);
+  box-shadow: 0 0 14px var(--red-glow), 0 0 4px var(--white);
+}
+
+.layers {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: var(--space-2);
+}
+
+/* On small screens the five layers stack into a scrollable row. */
+@media (max-width: 720px) {
+  .layers { grid-auto-flow: column; grid-template-columns: none; overflow-x: auto; }
+  .layer { min-width: 130px; }
+}
+
+.layer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 10px;
+  opacity: 0.45;
+  transition: opacity var(--dur) var(--ease);
+}
+.layer.lit { opacity: 1; }
+
+.node {
+  width: 46px;
+  height: 46px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  background: var(--bg-raised);
+  color: var(--text-dim);
+  transition: color var(--dur) var(--ease), border-color var(--dur) var(--ease),
+    box-shadow var(--dur) var(--ease), transform var(--dur) var(--ease);
+}
+.layer.lit .node {
+  color: var(--white);
+  border-color: var(--red);
+  box-shadow: var(--glow-red);
+  transform: translateY(-2px);
+}
+
+.meta { display: flex; flex-direction: column; gap: 2px; }
+.name {
+  font-family: var(--font-head);
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text);
+}
+.hint {
+  font-size: 0.72rem;
+  color: var(--text-dim);
+}
