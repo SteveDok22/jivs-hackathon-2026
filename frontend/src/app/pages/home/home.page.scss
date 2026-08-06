@@ -6,9 +6,13 @@ section { position: relative; }
   min-height: 100vh;
   display: flex;
   align-items: center;
-  /* subtle radial so the (later) network bg has depth even before it lands */
+  overflow: hidden;
+  /* subtle radial so the network bg has depth */
   background: radial-gradient(ellipse at 50% 40%, rgba(122, 21, 24, 0.15), transparent 60%);
 }
+
+/* Content sits above the canvas (which is z-index 0 inside the section). */
+.hero-content { position: relative; z-index: 1; }
 
 .hero .eyebrow { margin-bottom: var(--space-2); }
 
