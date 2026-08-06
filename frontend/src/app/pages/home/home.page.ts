@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { LineSidebarComponent } from '../../shared/line-sidebar.component';
+import { NetworkBackgroundComponent } from '../../shared/network-background.component';
 
 // AEGIS landing page. Stage 14 lays out the six-section spine as anchored
 // placeholders so the Line Sidebar and routing work end to end. Later stages
@@ -8,7 +9,7 @@ import { LineSidebarComponent } from '../../shared/line-sidebar.component';
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [RouterLink, LineSidebarComponent],
+  imports: [RouterLink, LineSidebarComponent, NetworkBackgroundComponent],
   styleUrl: './home.page.scss',
   template: `
     <app-line-sidebar />
@@ -16,7 +17,8 @@ import { LineSidebarComponent } from '../../shared/line-sidebar.component';
     <main>
       <!-- HERO -->
       <section id="hero" class="hero">
-        <div class="container">
+        <app-network-bg />
+        <div class="container hero-content">
           <p class="eyebrow">Trusted Enterprise AI</p>
           <h1 class="hero-title">
             <span class="mark">AEGIS</span>
