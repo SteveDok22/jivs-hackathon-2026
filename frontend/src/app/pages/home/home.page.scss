@@ -1,0 +1,50 @@
+main { position: relative; }
+
+section { position: relative; }
+
+.hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  /* subtle radial so the (later) network bg has depth even before it lands */
+  background: radial-gradient(ellipse at 50% 40%, rgba(122, 21, 24, 0.15), transparent 60%);
+}
+
+.hero .eyebrow { margin-bottom: var(--space-2); }
+
+.hero-title {
+  font-size: var(--fs-hero);
+  line-height: 0.95;
+}
+.hero-title .mark {
+  /* neon-outlined wordmark: white fill with a faint glow */
+  color: var(--white);
+  text-shadow: var(--glow-white);
+  letter-spacing: 0.02em;
+}
+
+.lede {
+  max-width: var(--maxw-prose);
+  margin: var(--space-3) 0 var(--space-4);
+  font-size: 1.25rem;
+  color: var(--text);
+}
+
+.actions { display: flex; gap: var(--space-2); flex-wrap: wrap; }
+
+.section {
+  padding: var(--space-12) 0;
+  border-top: 1px solid var(--line);
+}
+.section h2 { font-size: var(--fs-h1); margin: var(--space-2) 0 var(--space-3); }
+
+.prose {
+  max-width: var(--maxw-prose);
+  color: var(--text-dim);
+  font-size: 1.1rem;
+}
+
+.cta {
+  text-align: center;
+}
+.cta h2 { margin-bottom: var(--space-4); }
