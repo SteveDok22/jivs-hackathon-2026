@@ -34,3 +34,13 @@
 
 main { padding-top: var(--space-4); padding-bottom: var(--space-8); }
 .stack { display: flex; flex-direction: column; gap: var(--space-4); }
+
+/* Subtle network behind the console — dimmed so content stays legible. */
+.bg-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  opacity: 0.35;
+  pointer-events: none;
+}
+.topbar, main { position: relative; z-index: 1; }
