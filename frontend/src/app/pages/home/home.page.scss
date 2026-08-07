@@ -59,3 +59,80 @@ section { position: relative; }
 
 /* anim-in elements start hidden; JS reveals them (or reduced-motion shows them). */
 .anim-in { opacity: 0; }
+
+/* ── Problem section ─────────────────────────────────────────────── */
+.problem-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: var(--space-2);
+  margin-top: var(--space-4);
+}
+.card.pad { padding: var(--space-3); }
+.big {
+  display: block;
+  font-size: 2.2rem;
+  font-weight: 600;
+  color: var(--red);
+  text-shadow: var(--glow-red);
+}
+.cap { color: var(--text-dim); font-size: 0.95rem; }
+
+/* ── How it works ────────────────────────────────────────────────── */
+.how { overflow: hidden; }
+.how-content { position: relative; z-index: 1; }
+.layer-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: var(--space-2);
+  margin-top: var(--space-4);
+}
+.layer-card .num {
+  font-size: 0.9rem;
+  color: var(--red);
+  letter-spacing: 0.1em;
+}
+.layer-card h3 {
+  font-size: 1.1rem;
+  margin: 8px 0 8px;
+  color: var(--text);
+}
+.layer-card p { margin: 0; color: var(--text-dim); font-size: 0.95rem; }
+
+/* ── Metrics ─────────────────────────────────────────────────────── */
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: var(--space-2);
+  margin-top: var(--space-4);
+}
+.metric { display: flex; flex-direction: column; gap: 6px; }
+.metric .value {
+  font-size: 2.8rem;
+  font-weight: 600;
+  color: var(--white);
+  text-shadow: var(--glow-white);
+  line-height: 1;
+}
+.metric .mlabel { color: var(--text); font-size: 0.95rem; }
+.metric .mnote { color: var(--text-dim); font-size: 0.8rem; }
+
+/* ── Tech ────────────────────────────────────────────────────────── */
+.tech-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: var(--space-4);
+}
+.chip {
+  padding: 8px 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-pill);
+  font-size: 0.85rem;
+  color: var(--text);
+  background: var(--bg-raised);
+  transition: border-color var(--dur) var(--ease), color var(--dur) var(--ease);
+}
+.chip:hover { border-color: var(--red); color: var(--red-glow); }
+
+/* ── CTA ─────────────────────────────────────────────────────────── */
+.prose.center { margin-left: auto; margin-right: auto; text-align: center; }
