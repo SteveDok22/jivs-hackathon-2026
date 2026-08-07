@@ -171,6 +171,13 @@ import { CountUpDirective } from '../../shared/count-up.directive';
         </div>
       </section>
 
+      <footer class="footer">
+        <div class="container foot">
+          <span class="brand-mark">AEGIS</span>
+          <span class="foot-note">Trusted Enterprise AI · a portfolio project</span>
+        </div>
+      </footer>
+
     </main>
   `,
 })
