@@ -139,3 +139,4 @@ table-name mentions in retrieval so short names like `kna1` surface reliably.
 | 14 | Two-page skeleton: routing (/ + /app), Line Sidebar nav, product console | done |
 | 15 | Plexus network background: red data-net, cursor repel, scan pulse (canvas 2D) | done |
 | 16 | Hero: animated five-layer diagram, live demo field, title entrance (Anime.js) | done |
+| 17 | Landing sections: scroll-reveal, count-up metrics, Grid Scan, full content | done |
