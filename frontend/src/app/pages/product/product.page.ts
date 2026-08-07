@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { NetworkBackgroundComponent } from '../../shared/network-background.component';
 import { ChatComponent } from '../../features/chat/chat.component';
 import { MetricsComponent } from '../../features/metrics/metrics.component';
 
@@ -8,7 +9,7 @@ import { MetricsComponent } from '../../features/metrics/metrics.component';
 @Component({
   selector: 'app-product',
   standalone: true,
-  imports: [RouterLink, ChatComponent, MetricsComponent],
+  imports: [RouterLink, NetworkBackgroundComponent, ChatComponent, MetricsComponent],
   styleUrl: './product.page.scss',
   template: `
     <header class="topbar">
@@ -21,6 +22,7 @@ import { MetricsComponent } from '../../features/metrics/metrics.component';
       </div>
     </header>
 
+    <div class="bg-layer"><app-network-bg /></div>
     <main class="container">
       <div class="stack">
         <app-chat />
