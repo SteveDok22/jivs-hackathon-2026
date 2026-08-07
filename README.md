@@ -138,3 +138,4 @@ table-name mentions in retrieval so short names like `kna1` surface reliably.
 | 13 | AEGIS design system: DESIGN.md + theme tokens (dark/red/neon-white) | done |
 | 14 | Two-page skeleton: routing (/ + /app), Line Sidebar nav, product console | done |
 | 15 | Plexus network background: red data-net, cursor repel, scan pulse (canvas 2D) | done |
+| 16 | Hero: animated five-layer diagram, live demo field, title entrance (Anime.js) | done |
