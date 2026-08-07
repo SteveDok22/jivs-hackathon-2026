@@ -1,7 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { ApiService } from '../../core/api.service';
-import { AgentAnswer } from '../../core/models';
+import { ApiService } from '../core/api.service';
+import { AgentAnswer } from '../core/models';
 
 // A compact, self-contained live demo embedded in the hero: type a question,
 // it calls the real agent and shows the answer with its security verdicts.
