@@ -27,6 +27,13 @@ import { AgentAnswer } from '../../core/models';
         </button>
       </form>
 
+      @if (loading()) {
+        <div class="live-scan" aria-live="polite">
+          <div class="wave"><span></span><span></span><span></span><span></span><span></span></div>
+          <span class="scan-label">Filtering input · retrieving schema · checking policy · scanning output</span>
+        </div>
+      }
+
       @if (error()) {
         <p class="error">{{ error() }}</p>
       }
