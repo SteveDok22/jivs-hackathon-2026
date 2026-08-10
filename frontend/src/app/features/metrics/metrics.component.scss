@@ -49,3 +49,87 @@ header button:disabled { opacity: 0.5; cursor: not-allowed; }
 .sub { font-size: 0.72rem; color: var(--text-dim); }
 
 .footnote, .empty { color: var(--text-dim); font-size: 0.8rem; margin-top: 1rem; }
+
+/* ── Run button ──────────────────────────────────────────────────── */
+.run-btn {
+  padding: 0.55rem 1.2rem;
+  background: transparent;
+  border: 1px solid var(--red);
+  color: var(--red-glow);
+  border-radius: var(--radius-pill);
+  font-weight: 600;
+  font-size: 0.85rem;
+  transition: background var(--dur) var(--ease), color var(--dur) var(--ease),
+    box-shadow var(--dur) var(--ease);
+}
+.run-btn:hover:not(:disabled) {
+  background: rgba(229, 50, 45, 0.12);
+  box-shadow: var(--glow-red);
+}
+.run-btn:disabled { opacity: 0.6; cursor: default; }
+
+/* ── Scanning loading state ──────────────────────────────────────── */
+.scanning {
+  position: relative;
+  height: 120px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--bg-elevated);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.scanbar {
+  position: absolute;
+  top: 0; bottom: 0;
+  width: 120px;
+  background: linear-gradient(90deg, transparent,
+    rgba(229, 50, 45, 0.25), rgba(255, 77, 77, 0.4), rgba(229, 50, 45, 0.25), transparent);
+  animation: scan-x 1.1s var(--ease) infinite;
+}
+@keyframes scan-x {
+  0%   { left: -120px; }
+  100% { left: 100%; }
+}
+.steps {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  z-index: 1;
+}
+.steps span { animation: blink 1.4s ease-in-out infinite; }
+.steps span:nth-child(2) { animation-delay: 0.2s; }
+.steps span:nth-child(3) { animation-delay: 0.4s; }
+.steps span:nth-child(4) { animation-delay: 0.6s; }
+@keyframes blink { 0%, 100% { opacity: 0.35; } 50% { opacity: 1; color: var(--red-glow); } }
+
+/* ── Animated metric cards ───────────────────────────────────────── */
+.grid .metric {
+  position: relative;
+  overflow: hidden;
+  opacity: 0; /* revealed by JS; reduced-motion sets to 1 */
+  padding: var(--space-3);
+}
+/* The red shutter that wipes across each card on reveal. */
+.shutter {
+  position: absolute;
+  inset: 0;
+  background: var(--grad-red);
+  transform: scaleX(0);
+  transform-origin: 0 0;
+  z-index: 2;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .grid .metric { opacity: 1; }
+  .scanbar, .steps span { animation: none; }
+  .shutter { display: none; }
+}
