@@ -1,13 +1,14 @@
 .rail {
   position: fixed;
-  left: var(--space-3);
+  left: 14px;
   top: 50%;
   transform: translateY(-50%);
-  z-index: 40;
+  z-index: 50; /* above page content so labels stay legible */
 }
 
-/* Hide the rail on narrow screens — it needs horizontal room to breathe. */
-@media (max-width: 900px) {
+/* Hide the rail on narrow / mid screens — it needs horizontal room, and the
+   content there uses the full width. Below this width the rail is off. */
+@media (max-width: 1100px) {
   .rail { display: none; }
 }
 
@@ -26,17 +27,17 @@ button {
   gap: 12px;
   background: transparent;
   border: none;
-  padding: 4px 0;
+  padding: 6px 10px 6px 4px;
+  border-radius: var(--radius-pill);
   color: var(--text-dim);
-  transition: color var(--dur) var(--ease);
+  transition: color var(--dur) var(--ease), background var(--dur) var(--ease);
 }
 
-/* The tick: a short horizontal line that grows and turns white when active —
-   this is the "line" of the Line Sidebar. */
 .tick {
   display: block;
   width: 20px;
   height: 2px;
+  flex-shrink: 0;
   background: var(--line);
   transition: width var(--dur) var(--ease), background var(--dur) var(--ease),
     box-shadow var(--dur) var(--ease);
@@ -47,21 +48,32 @@ button {
   font-size: 0.72rem;
   text-transform: uppercase;
   letter-spacing: 0.06em;
+  white-space: nowrap;
   opacity: 0;
   transform: translateX(-6px);
   transition: opacity var(--dur) var(--ease), transform var(--dur) var(--ease);
 }
 
-/* Reveal the label on hover of the whole rail, or when active. */
+/* On hover of the rail, labels appear AND get a solid backing so they never
+   blend into the text behind them. */
+.rail:hover button {
+  background: rgba(10, 10, 12, 0.9);
+  backdrop-filter: blur(6px);
+}
 .rail:hover .label { opacity: 1; transform: none; }
 
 button:hover { color: var(--text); }
-button:hover .tick { width: 32px; background: var(--red); }
+button:hover .tick { width: 30px; background: var(--red); }
 
 button.active { color: var(--white); }
 button.active .tick {
-  width: 40px;
+  width: 38px;
   background: var(--white);
   box-shadow: var(--glow-white);
 }
 button.active .label { opacity: 1; transform: none; }
+/* The active label always has a backing, even without hover. */
+button.active {
+  background: rgba(10, 10, 12, 0.75);
+  backdrop-filter: blur(6px);
+}
