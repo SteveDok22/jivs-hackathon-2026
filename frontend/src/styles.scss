@@ -164,3 +164,10 @@ button { font-family: inherit; cursor: pointer; }
   }
   .reveal { opacity: 1; transform: none; }
 }
+
+/* On wide screens the Line Sidebar occupies the left edge; give page content
+   a left gutter so text never sits beneath the rail. Matches the rail's
+   visibility breakpoint (1100px). */
+@media (min-width: 1101px) {
+  .container { padding-left: 96px; }
+}
