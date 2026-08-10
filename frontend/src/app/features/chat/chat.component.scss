@@ -87,3 +87,55 @@ th, td {
 }
 th { color: var(--text-dim); font-weight: 600; }
 td { font-family: var(--mono); }
+
+/* ── Live red processing field (option b) ────────────────────────── */
+.live-scan {
+  margin: var(--space-2) 0;
+  padding: var(--space-3);
+  border: 1px solid rgba(229, 50, 45, 0.4);
+  border-radius: var(--radius);
+  background: radial-gradient(ellipse at 50% 50%, rgba(229, 50, 45, 0.12), transparent 70%),
+    var(--bg-elevated);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  animation: breathe 1.8s var(--ease) infinite;
+}
+@keyframes breathe {
+  0%, 100% { border-color: rgba(229, 50, 45, 0.35); box-shadow: 0 0 0 rgba(229,50,45,0); }
+  50%      { border-color: rgba(255, 77, 77, 0.7); box-shadow: 0 0 24px rgba(229,50,45,0.25); }
+}
+
+/* Equalizer-style red bars, pulsing out of phase. */
+.wave { display: flex; align-items: center; gap: 5px; height: 34px; }
+.wave span {
+  width: 5px;
+  height: 100%;
+  border-radius: 3px;
+  background: linear-gradient(to top, var(--red-deep), var(--red-glow));
+  transform-origin: bottom;
+  animation: eq 1s ease-in-out infinite;
+}
+.wave span:nth-child(1) { animation-delay: 0s; }
+.wave span:nth-child(2) { animation-delay: 0.15s; }
+.wave span:nth-child(3) { animation-delay: 0.3s; }
+.wave span:nth-child(4) { animation-delay: 0.45s; }
+.wave span:nth-child(5) { animation-delay: 0.6s; }
+@keyframes eq {
+  0%, 100% { transform: scaleY(0.3); opacity: 0.6; }
+  50%      { transform: scaleY(1); opacity: 1; box-shadow: 0 0 10px var(--red-glow); }
+}
+
+.scan-label {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--text-dim);
+  letter-spacing: 0.04em;
+  text-align: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .live-scan { animation: none; }
+  .wave span { animation: none; transform: scaleY(0.6); }
+}
