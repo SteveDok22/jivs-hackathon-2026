@@ -149,3 +149,4 @@ to a real file with a path-checking script.
 | 16 | Hero: animated five-layer diagram, live demo field, title entrance (Anime.js) | done |
 | 17 | Landing sections: scroll-reveal, count-up metrics, Grid Scan, full content | done |
 | 18 | Custom cursor, product-page background, footer, polish | done |
+| 19 | Sidebar overlap fix, animated eval reveal (shutter + count-up), live scan field | done |
