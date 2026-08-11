@@ -40,7 +40,7 @@ import { AfterViewInit, Component, ElementRef, OnDestroy, inject } from '@angula
   `],
 })
 export class CursorComponent implements AfterViewInit, OnDestroy {
-  private readonly host = inject(ElementRef<HTMLElement>);
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
 
   private ring!: HTMLElement;
   private dot!: HTMLElement;
@@ -84,8 +84,8 @@ export class CursorComponent implements AfterViewInit, OnDestroy {
     }
 
     this.enabled = true;
-    this.ring = this.host.nativeElement.querySelector('.ring')!;
-    this.dot = this.host.nativeElement.querySelector('.dot')!;
+    this.ring = this.host.nativeElement.querySelector<HTMLElement>('.ring')!;
+    this.dot = this.host.nativeElement.querySelector<HTMLElement>('.dot')!;
     document.body.style.cursor = 'none'; // hide native cursor site-wide
 
     window.addEventListener('pointermove', this.onMove, { passive: true });
