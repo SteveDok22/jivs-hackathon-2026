@@ -120,22 +120,22 @@ import { CountUpDirective } from '../../shared/count-up.directive';
           </p>
           <div class="metrics-grid">
             <div class="metric card pad" [appReveal]="60">
-              <span class="value mono" appCountUp [appCountUp]="169">0</span>
+              <span class="value mono" [appCountUp]="169">0</span>
               <span class="mlabel">names discovered by NER</span>
               <span class="mnote">beyond the 3-name watch-list</span>
             </div>
             <div class="metric card pad" [appReveal]="130">
-              <span class="value mono" appCountUp [appCountUp]="100" suffix="%">0</span>
+              <span class="value mono" [appCountUp]="100" suffix="%">0</span>
               <span class="mlabel">prompt-injection catch rate</span>
               <span class="mnote">0% false positives on benign input</span>
             </div>
             <div class="metric card pad" [appReveal]="200">
-              <span class="value mono" appCountUp [appCountUp]="1" [decimals]="2">0</span>
+              <span class="value mono" [appCountUp]="1" [decimals]="2">0</span>
               <span class="mlabel">PII detection F1</span>
               <span class="mnote">precision 1.00 · recall 1.00</span>
             </div>
             <div class="metric card pad" [appReveal]="270">
-              <span class="value mono" appCountUp [appCountUp]="0">0</span>
+              <span class="value mono" [appCountUp]="0">0</span>
               <span class="mlabel">data leaks after pseudonymization</span>
               <span class="mnote">joins stay intact, data still usable</span>
             </div>
@@ -182,7 +182,7 @@ import { CountUpDirective } from '../../shared/count-up.directive';
   `,
 })
 export class HomePage implements AfterViewInit {
-  private readonly host = inject(ElementRef<HTMLElement>);
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
 
   readonly howLayers = [
     { n: 1, title: 'Input filter', body: 'Prompt-injection attempts are caught before the agent runs — layered heuristics plus an optional classifier.' },
