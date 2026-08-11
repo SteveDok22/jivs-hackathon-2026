@@ -126,6 +126,42 @@ escapes the `app/` directory — a build-time module-not-found.
 *Fix:* corrected the depth; verified every import across the frontend resolves
 to a real file with a path-checking script.
 
+**11. Required directive input used as a bare marker broke the build (Stage 19).**
+*Symptom:* `ng serve` failed with `TS2322: Type 'string' is not assignable to
+type 'number'` on `appCountUp [appCountUp]="169"`, and the dev server never
+started.
+*Cause:* the count-up directive declares `appCountUp` as
+`input.required<number>()`. Writing it twice — once as a bare attribute marker
+and once as a bound input — made Angular bind the bare marker as an empty
+string to a number-typed required input.
+*Fix:* use the input binding alone (`[appCountUp]="169"`); the directive still
+activates from the bound input, no separate marker needed. Unlike a bare
+`appReveal` (which has a default value and so tolerates the marker form), a
+required input must always receive its typed value.
+
+**12. Untyped `ElementRef` injection broke the strict-mode build (Stage 19).**
+*Symptom:* `ng serve` failed with a cluster of `TS7006: Parameter implicitly has
+an 'any' type` and `TS2347: Untyped function calls may not accept type
+arguments` across the animation components.
+*Cause:* `inject(ElementRef<HTMLElement>)` does not convey the element type —
+`inject` returned `ElementRef<any>`, so `nativeElement` was `any`, which poisoned
+every `querySelector<HTMLElement>` and `.forEach` callback downstream.
+*Fix:* type the injection explicitly with
+`inject<ElementRef<HTMLElement>>(ElementRef)` in every component/directive, give
+`querySelector<HTMLElement>` results proper element fields, and annotate the
+Anime.js `update` callback. Now `nativeElement` is typed and the strict compiler
+infers the rest.
+
+**13. Interpolation into `data-*` and bare directive inputs broke the template build (Stage 19).**
+*Symptom:* `NG8002: Can't bind to 'count'` on `data-count="{{ expr }}"`, plus
+`TS2322: string not assignable to number` on bare `appReveal`.
+*Cause:* Angular parses `data-x="{{ expr }}"` as a property binding (there is no
+`count` property), and a bare structural-style input on a number-typed directive
+binds the empty string under the strict template compiler.
+*Fix:* use `[attr.data-count]="expr"` for dynamic data attributes, and give the
+reveal directive an input `transform` that coerces `number | string` to a
+number — so both `appReveal` and `[appReveal]="80"` type-check.
+
 ## Roadmap
 
 | Stage | Module | Status |
