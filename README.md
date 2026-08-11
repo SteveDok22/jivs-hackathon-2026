@@ -186,3 +186,4 @@ number — so both `appReveal` and `[appReveal]="80"` type-check.
 | 17 | Landing sections: scroll-reveal, count-up metrics, Grid Scan, full content | done |
 | 18 | Custom cursor, product-page background, footer, polish | done |
 | 19 | Sidebar overlap fix, animated eval reveal (shutter + count-up), live scan field | done |
+| 20 | Example-question panel in console (5 curated prompts with category badges) | done |
