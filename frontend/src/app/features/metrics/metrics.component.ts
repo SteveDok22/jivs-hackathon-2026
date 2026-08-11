@@ -33,7 +33,7 @@ import { EvalReport } from '../../core/models';
         <div class="grid" #grid>
           <div class="metric card"><span class="shutter"></span>
             <span class="label">PII detection F1</span>
-            <span class="value verified" data-count="{{ r.pii.name_detection.f1 }}"
+            <span class="value verified" [attr.data-count]="r.pii.name_detection.f1"
                   data-decimals="2">0.00</span>
             <span class="sub">P {{ pct(r.pii.name_detection.precision) }} ·
               R {{ pct(r.pii.name_detection.recall) }}</span>
@@ -41,14 +41,14 @@ import { EvalReport } from '../../core/models';
 
           <div class="metric card"><span class="shutter"></span>
             <span class="label">Names discovered (NER)</span>
-            <span class="value verified" data-count="{{ r.pii.persons_discovered }}">0</span>
+            <span class="value verified" [attr.data-count]="r.pii.persons_discovered">0</span>
             <span class="sub">{{ r.pii.presidio_available ? 'Presidio active' : 'regex fallback' }}
               · vs {{ r.pii.persons_expected }} on watch-list</span>
           </div>
 
           <div class="metric card"><span class="shutter"></span>
             <span class="label">Injection catch rate</span>
-            <span class="value verified" data-count="{{ r.guardrails.catch_rate * 100 }}"
+            <span class="value verified" [attr.data-count]="r.guardrails.catch_rate * 100"
                   data-suffix="%" data-decimals="1">0%</span>
             <span class="sub">{{ r.guardrails.attacks_caught }}/{{ r.guardrails.attacks_total }}
               attacks · {{ r.guardrails.benign_blocked }}/{{ r.guardrails.benign_total }} false pos</span>
@@ -87,7 +87,7 @@ import { EvalReport } from '../../core/models';
 })
 export class MetricsComponent {
   private readonly api = inject(ApiService);
-  private readonly host = inject(ElementRef<HTMLElement>);
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
 
   readonly report = signal<EvalReport | null>(null);
   readonly loading = signal(false);
