@@ -8,10 +8,17 @@ import { AfterViewInit, Directive, ElementRef, OnDestroy, inject, input } from '
   standalone: true,
 })
 export class RevealDirective implements AfterViewInit, OnDestroy {
-  private readonly el = inject(ElementRef<HTMLElement>);
+  private readonly el = inject<ElementRef<HTMLElement>>(ElementRef);
 
-  // Optional stagger delay in ms, for sequencing siblings.
-  readonly appReveal = input<number>(0);
+  // Optional stagger delay in ms. Accepts both the bare form `appReveal`
+  // (which passes an empty string -> 0) and `[appReveal]="80"`. The transform
+  // coerces either to a number so the strict template compiler is satisfied.
+  readonly appReveal = input(0, {
+    transform: (value: number | string): number => {
+      const n = typeof value === 'string' ? parseInt(value, 10) : value;
+      return Number.isFinite(n) ? n : 0;
+    },
+  });
 
   private observer?: IntersectionObserver;
 
