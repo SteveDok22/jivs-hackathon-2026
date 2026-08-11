@@ -46,7 +46,7 @@ interface Layer {
   `,
 })
 export class FiveLayersComponent implements AfterViewInit, OnDestroy {
-  private readonly host = inject(ElementRef<HTMLElement>);
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
   private timeline?: anime.AnimeTimelineInstance;
 
   readonly layers: Layer[] = [
@@ -109,7 +109,7 @@ export class FiveLayersComponent implements AfterViewInit, OnDestroy {
       duration: 4200,
       easing: 'easeInOutSine',
       begin: () => nodes.forEach((n) => n.classList.remove('lit')),
-      update: (anim) => {
+      update: (anim: anime.AnimeInstance) => {
         // Light each layer as the dot reaches its position.
         const progress = anim.progress / 100;
         const activeIndex = Math.min(count - 1, Math.floor(progress * count));
