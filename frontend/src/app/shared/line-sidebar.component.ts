@@ -33,7 +33,7 @@ interface NavSection {
   `,
 })
 export class LineSidebarComponent implements OnInit, OnDestroy {
-  private readonly host = inject(ElementRef<HTMLElement>);
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
 
   // Sections of the homepage, in order. Kept here so the rail is the single
   // place that defines the page's narrative spine.
