@@ -50,7 +50,7 @@ export class NetworkBackgroundComponent implements AfterViewInit, OnDestroy {
   @ViewChild('canvas', { static: true })
   private canvasRef!: ElementRef<HTMLCanvasElement>;
 
-  private readonly host = inject(ElementRef<HTMLElement>);
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
 
   private ctx!: CanvasRenderingContext2D;
   private nodes: Node[] = [];
