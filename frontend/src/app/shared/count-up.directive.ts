@@ -9,7 +9,7 @@ import anime from 'animejs';
   standalone: true,
 })
 export class CountUpDirective implements AfterViewInit, OnDestroy {
-  private readonly el = inject(ElementRef<HTMLElement>);
+  private readonly el = inject<ElementRef<HTMLElement>>(ElementRef);
 
   readonly appCountUp = input.required<number>();
   readonly decimals = input<number>(0);
