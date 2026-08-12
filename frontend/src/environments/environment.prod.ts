@@ -1,5 +1,9 @@
-// Prod: point at the deployed API (set at Stage 8, AWS).
+// Prod (Vercel): no backend is deployed, so demo mode serves captured real
+// responses and the console shows a "run locally" note. This keeps the public
+// site live and free while the full agent runs locally from the repo.
 export const environment = {
   production: true,
-  apiBase: 'https://REPLACE-WITH-DEPLOYED-API',
+  demoMode: true,
+  apiBase: '',
+  repoUrl: 'https://github.com/SteveDok22/jivs-hackathon-2026',
 };

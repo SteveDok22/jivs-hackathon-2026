@@ -1,6 +1,7 @@
-// Dev: empty base -> requests go through Angular's proxy (proxy.conf.json)
-// to the FastAPI server, which sidesteps CORS during development.
+// Dev: live backend via Angular's proxy (proxy.conf.json), demo mode off.
 export const environment = {
   production: false,
+  demoMode: false,
   apiBase: '',
+  repoUrl: 'https://github.com/SteveDok22/jivs-hackathon-2026',
 };
