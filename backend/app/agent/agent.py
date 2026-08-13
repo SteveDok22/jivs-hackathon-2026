@@ -20,6 +20,7 @@ from pydantic import BaseModel, Field
 
 from app.agent.catalog import TableCard, build_catalog, retrieve
 from app.agent.policy import check
+from app.config import get_settings
 from app.data.connectors import duckdb_over_csv
 from app.guardrails.input_filter import inspect_input
 from app.guardrails.output_filter import inspect_output
@@ -30,8 +31,18 @@ MAX_RESULT_ROWS_IN_PROMPT = 30
 
 SYSTEM_TEMPLATE = """You are a careful data analyst for an enterprise archive.
 You answer questions ONLY from the tables described below.
+
 Rules:
 - Use only listed tables and columns. Never invent names.
+- Select ONLY the columns needed to answer the question. Do not add extra
+  columns "just in case" — a question about location needs the name and city,
+  not phone or email.
+- NEVER select these restricted columns; they are blocked by policy and will
+  cause the query to be rejected: {denied_columns}.
+  If a question seems to require them, answer using non-restricted columns
+  instead (e.g. count or list by name/city), never the restricted ones.
+- Write ONE single SELECT statement. Do not use UNION, INSERT, UPDATE, DELETE,
+  or multiple statements — only a single SELECT is permitted.
 - Prefer aggregate answers with the rows that support them.
 - Dialect: DuckDB SQL.
 
@@ -92,8 +103,10 @@ class DataAgent:
 
         # 1. Retrieve relevant schema cards.
         cards = retrieve(question, self._catalog)
+        denied = get_settings().agent_denied_columns
         system = SYSTEM_TEMPLATE.format(
-            schema_cards="\n\n".join(card.render() for card in cards)
+            schema_cards="\n\n".join(card.render() for card in cards),
+            denied_columns=", ".join(denied) if denied else "(none)",
         )
 
         # 2. Generate SQL (structured, validated, auto-retry inside).
