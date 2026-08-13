@@ -25,7 +25,17 @@ from functools import lru_cache
 from app.config import get_settings
 
 _EMAIL = re.compile(r"[\w.+-]+@[\w-]+\.[\w.]+")
-_PHONE = re.compile(r"(?:\+?\d[\d\s()/-]{7,}\d)")
+# A phone number must either start with "+" (international) or contain a real
+# separator (space, dash, slash, parens). A bare run of digits like a customer
+# number (0000001063) is an ID, not a phone — matching those was a false
+# positive that redacted legitimate identifiers from answers.
+_PHONE = re.compile(
+    r"(?:"
+    r"\+\d[\d\s()/-]{6,}\d"                   # international: +41 44 123 45 67
+    r"|"
+    r"\d[\d]{0,3}[\s()/-][\d\s()/-]{5,}\d"    # domestic w/ separators: 044 123 45 67
+    r")"
+)
 _IBAN = re.compile(r"\b[A-Z]{2}\d{2}(?:\s?[A-Z0-9]{4}){3,7}\b")
 
 
