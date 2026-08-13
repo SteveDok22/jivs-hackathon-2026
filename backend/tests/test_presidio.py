@@ -51,3 +51,16 @@ def test_discovery_finds_more_than_the_watchlist(tmp_path) -> None:
     assert len(discovered) > len(watchlist) + 20
     # And it still includes the watch-listed person.
     assert any("Jonas" in name for name in discovered)
+
+
+def test_customer_id_not_flagged_as_phone() -> None:
+    """A bare digit run (customer number) must not be detected as a phone."""
+    entities = detect("customer number 0000001063", use_presidio=False)
+    assert not [e for e in entities if e.pii_type == "PHONE"]
+
+
+def test_real_phone_still_detected() -> None:
+    """Phones with separators or + prefix are still caught."""
+    for text in ["+41 44 123 45 67", "call 079 555 12 34"]:
+        entities = detect(text, use_presidio=False)
+        assert [e for e in entities if e.pii_type == "PHONE"], text
