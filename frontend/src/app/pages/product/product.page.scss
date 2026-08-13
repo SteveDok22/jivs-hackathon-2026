@@ -44,3 +44,19 @@ main { padding-top: var(--space-4); padding-bottom: var(--space-8); }
   pointer-events: none;
 }
 .topbar, main { position: relative; z-index: 1; }
+
+/* ── Demo-mode banner ────────────────────────────────────────────── */
+.demo-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: var(--space-2) var(--space-3);
+  margin-bottom: var(--space-3);
+  background: rgba(229, 50, 45, 0.06);
+  border: 1px solid rgba(229, 50, 45, 0.3);
+  border-radius: var(--radius);
+}
+.demo-banner .badge { flex-shrink: 0; margin-top: 2px; }
+.demo-banner p { margin: 0; font-size: 0.9rem; color: var(--text-dim); }
+.demo-banner a { color: var(--red-glow); font-weight: 600; white-space: nowrap; }
+.demo-banner a:hover { text-decoration: underline; }
