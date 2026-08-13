@@ -162,6 +162,16 @@ binds the empty string under the strict template compiler.
 reveal directive an input `transform` that coerces `number | string` to a
 number — so both `appReveal` and `[appReveal]="80"` type-check.
 
+**14. Customer IDs falsely redacted as phone numbers (Stage 22).**
+*Symptom:* an answer mentioning a customer number (`0000001063`) came back with
+that value replaced by `[REDACTED_PHONE]` — the output PII scan mistook an ID
+for a phone number.
+*Cause:* the phone regex matched any run of 9+ digits, so bare identifiers with
+no separators were caught.
+*Fix:* require a phone to start with `+` or contain a real separator (space,
+dash, slash, parens); bare digit runs are treated as IDs. Regression tests
+cover both an ID (not matched) and real phones (still matched).
+
 ## Roadmap
 
 | Stage | Module | Status |
@@ -187,3 +197,6 @@ number — so both `appReveal` and `[appReveal]="80"` type-check.
 | 18 | Custom cursor, product-page background, footer, polish | done |
 | 19 | Sidebar overlap fix, animated eval reveal (shutter + count-up), live scan field | done |
 | 20 | Example-question panel in console (5 curated prompts with category badges) | done |
+| 21 | Agent prompt hardening: avoid restricted columns, single-SELECT only | done |
+| 22 | Phone regex precision: customer IDs no longer redacted as phones | done |
+| 23 | Deploy-ready frontend: demo mode with captured answers, run-locally note, Vercel config | done |
