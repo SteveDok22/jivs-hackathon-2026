@@ -159,11 +159,17 @@ export class ChatComponent {
         this.loading.set(false);
       },
       error: (err) => {
-        this.error.set(
-          err?.status === 0
-            ? 'Backend not reachable — start the API on :8000.'
-            : `Request failed: ${err?.message ?? 'unknown error'}`,
-        );
+        if (err?.demo) {
+          // Demo mode, unknown question: invite the user to run it locally.
+          this.error.set(
+            'This is a live preview with a few saved examples. ' +
+              'To ask your own questions, run the agent locally — clone the repo (link below).',
+          );
+        } else if (err?.status === 0) {
+          this.error.set('Backend not reachable — start the API on :8000.');
+        } else {
+          this.error.set(`Request failed: ${err?.message ?? 'unknown error'}`);
+        }
         this.loading.set(false);
       },
     });
