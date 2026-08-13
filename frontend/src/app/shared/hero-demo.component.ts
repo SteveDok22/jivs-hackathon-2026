@@ -72,11 +72,13 @@ export class HeroDemoComponent {
         this.loading.set(false);
       },
       error: (err) => {
-        this.error.set(
-          err?.status === 0
-            ? 'Backend not reachable — start the API on :8000.'
-            : `Request failed (${err?.status ?? 'error'}).`,
-        );
+        if (err?.demo) {
+          this.error.set('Live preview — try one of the example questions in the console.');
+        } else if (err?.status === 0) {
+          this.error.set('Backend not reachable — start the API on :8000.');
+        } else {
+          this.error.set(`Request failed (${err?.status ?? 'error'}).`);
+        }
         this.loading.set(false);
       },
     });
