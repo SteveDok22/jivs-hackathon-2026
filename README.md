@@ -9,7 +9,7 @@ against an explicit policy, personal data is pseudonymized before the model
 ever sees it, and prompt-injection attempts are filtered out. The name is the
 Greek *aegis*, the shield of Zeus: the whole system is a shield over live data.
 
-🔗 **Live site:** _[coming soon — deployed on Vercel]_
+🔗 **Live site:** _[ soon — deployed on Vercel]_
 📦 **Repository:** https://github.com/SteveDok22/jivs-hackathon-2026
 
 > The hosted site is a **live preview**: the landing page is fully interactive,
