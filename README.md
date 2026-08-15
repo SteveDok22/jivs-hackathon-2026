@@ -1,5 +1,7 @@
 # AEGIS — Trusted Enterprise AI
 
+![AEGIS demo](docs/assets/gifs/Screen-Rec.AEGIS..gif)
+
 **Trusted Enterprise AI, built for secure organizations.**
 
 AEGIS is a secured AI agent that answers plain-language questions over an
@@ -13,7 +15,6 @@ Greek *aegis*, the shield of Zeus: the whole system is a shield over live data.
 
 📦 **Repository:** https://github.com/SteveDok22/jivs-hackathon-2026
 
-![AEGIS demo](docs/assets/gifs/Screen-Rec.AEGIS..gif)
 
 > The hosted site is a **live preview**: the landing page is fully interactive,
 > and the console runs a set of captured real agent responses so it stays live
