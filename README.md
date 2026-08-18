@@ -1,6 +1,6 @@
 # AEGIS — Trusted Enterprise AI
 
-![AEGIS demo](docs/assets/gifs/Screen-Rec.AEGIS..gif)
+[![AEGIS demo](docs/assets/gifs/Screen-Rec.AEGIS..gif)](https://jivs-hackathon-2026.vercel.app/)
 
 **Trusted Enterprise AI, built for secure organizations.**
 
@@ -64,35 +64,12 @@ platform), then continued as a portfolio project.
 
 ---
 
-## Screenshots
-
-> _Add screenshots here after deployment (captured from the production build)._
-
-| View | Description |
-|------|-------------|
-| _Hero_ | Landing page with plexus background and animated five-layer flow |
-| _Console_ | The agent answering with cited source rows |
-| _Policy refusal_ | A restricted-column request being refused |
-| _Injection blocked_ | A prompt-injection attempt caught at the input filter |
-| _Evaluation panel_ | Live metrics: detection F1, catch rate, discovery, cost |
-
----
-
 ## Architecture — The Five Layers
 
-> _A live architecture diagram will be added here._
+![AEGIS Architecture](docs/assets/architecture/5leyers.png)
 
 A request flows left to right through five layers; break one and the next still
 holds — defense in depth, not a single gate.
-
-```
-  ┌─────────────┐   ┌──────────────┐   ┌───────────────┐   ┌─────────────┐   ┌──────────────┐
-  │ 1. Input    │──▶│ 2. Pseudonymized │─▶│ 3. Policy-bound │─▶│ 4. Output   │─▶│ 5. Cited     │
-  │    filter   │   │    data       │   │    agent      │   │    scan     │   │    answer    │
-  └─────────────┘   └──────────────┘   └───────────────┘   └─────────────┘   └──────────────┘
-   blocks prompt     names replaced,     SQL parsed &         no PII leaves      every claim
-   injection         joins intact        checked before run   the system         sourced
-```
 
 1. **Input filter** — layered heuristics (plus an optional classifier) catch
    prompt-injection attempts before the agent runs.
@@ -114,6 +91,8 @@ holds — defense in depth, not a single gate.
 Because a real enterprise archive cannot be shared, AEGIS ships with a
 **synthetic SAP-like dataset** generated deterministically (`seed=42`) so the
 whole system — and its evaluation — is reproducible by anyone.
+
+![AEGIS Architecture](docs/assets/gifs/console-answer.gif)
 
 The generator (`backend/app/data/synthetic.py`) produces real SAP table names:
 
@@ -151,6 +130,8 @@ challenges an enterprise data platform poses:
 4. **Resist misuse.** Prompt-injection and destructive-query attempts must be
    caught, and the system must be honest about what it refused and why.
 
+![AEGIS Architecture](docs/assets/gifs/policy-refusal.gif)
+
 ---
 
 ## Hypotheses and Validation
@@ -185,12 +166,7 @@ provide.
 
 ## The Rationale: Mapping Requirements to Layers
 
-| Business requirement | Layer(s) that satisfy it | How |
-|----------------------|--------------------------|-----|
-| Make the archive usable | Agent (3) + Cited answer (5) | schema retrieval + SQL generation, every answer sourced |
-| Protect personal data | Pseudonymized data (2) + Output scan (4) | mask before the model; scan after it |
-| Enforce access policy | Policy-bound agent (3) | `sqlglot` parses SQL, checks allowlist/denylist before execution |
-| Resist misuse | Input filter (1) + Policy (3) | injection heuristics in; single-SELECT-only enforced |
+![AEGIS Architecture](docs/assets/screenshots/TheRationale.png)
 
 Every requirement maps to at least two layers, so no single failure exposes the
 data — the core of the "defense in depth" argument.
@@ -226,6 +202,8 @@ on a cloud provider's managed models when required.
 AEGIS does not claim it works — it measures it. The eval harness
 (`backend/app/eval/harness.py`) runs entirely offline against the synthetic
 dataset and its ground-truth key, and reports:
+
+![AEGIS Architecture](docs/assets/gifs/evaluation.gif)
 
 | Metric | Result | Meaning |
 |--------|--------|---------|
